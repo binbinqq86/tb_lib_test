@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        
+        <RelativeLayout
+            android:id="@+id/root_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    
+    <FrameLayout
+        android:id="@+id/root_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/baselib_dp4"
+            android:layout_gravity="top"
+            android:background="@drawable/baselib_toolbar_dropshadow"/>
+    </FrameLayout>
+</LinearLayout>

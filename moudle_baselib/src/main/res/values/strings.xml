@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">moudle_baselib</string>
+    <string name="baselib_app_name">moudle_baselib</string>
+    <string name="baselib_loading">加载中&#8230;</string>
+    <string name="baselib_loading_error">页面加载失败</string>
+    <string name="baselib_loading_retry">重试</string>
+    <string name="baselib_loading_empty">暂无相关内容</string>
 </resources>
