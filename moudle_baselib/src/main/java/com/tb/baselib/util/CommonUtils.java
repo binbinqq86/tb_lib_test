@@ -7,11 +7,11 @@ import com.tb.baselib.base.BaseApplication;
 
 /**
  * Created by : tb on 2017/9/20 下午3:36.
- * Description :普通的工具类，无法归类的都写到这里
+ * Description :通用的工具类，无法归类的都写到这里
  */
 public class CommonUtils {
     /**
-     * 获取dp
+     * dp转px
      * @param dp
      * @return
      */

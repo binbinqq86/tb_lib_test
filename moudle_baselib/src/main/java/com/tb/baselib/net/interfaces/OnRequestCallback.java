@@ -4,15 +4,15 @@ package com.tb.baselib.net.interfaces;
  * Created by : tb on 2017/9/21 上午10:48.
  * Description :网络请求结果回调接口
  */
-public interface OnRequestCallback<T> {
+public interface OnRequestCallback<K> {
     /**
      * 成功返回
      *
      * @param responseCode 回复代码
      * @param requestCode  请求代码
-     * @param response     回复实体
+     * @param response     回复实体，真正的数据部分
      */
-    void onSuccess(final int responseCode, final int requestCode, final T response);
+    void onSuccess(final int responseCode, final int requestCode, final K response);
     
     /**
      * 失败返回
