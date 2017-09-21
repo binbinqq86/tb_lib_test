@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.tb.baselib.util.LogUtils;
 import com.tb.baselib.util.ToastUtils;
 
 /**
@@ -23,5 +24,10 @@ public class BaseApplication extends Application{
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+    
+    private void initComponent(){
+        //初始化日志
+        LogUtils.init();
     }
 }
