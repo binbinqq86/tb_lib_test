@@ -1,20 +1,38 @@
 package com.tb.baselib.net.impl;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import com.tb.baselib.constant.ExceptionCode;
+import com.tb.baselib.json.JsonUtil;
 import com.tb.baselib.net.interfaces.IApiRequester;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
+import com.tb.baselib.util.LogUtils;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by : tb on 2017/9/21 上午11:52.
  * Description :OKHttp实现的具体的请求任务类
  */
 public class OKHttpRequester implements IApiRequester {
+    private static final String TAG = "OKHttpRequester";
+    private static final Handler mHandler=new Handler(Looper.getMainLooper());
     private static final long DEFAULT_TIMEOUT = 10 * 1000;
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String CONTENT_TYPE = "application/json";
+    private static final String DEBUG_FORMAT = "RESP CODE: %1$s, RESQ CODE %2$s, JSON:%3$s, EXCEPTION:%4$s";
     /**
      * 采用线程安全的hashTable
      * K: 超时时间
@@ -48,7 +66,107 @@ public class OKHttpRequester implements IApiRequester {
     }
     
     @Override
-    public void post(int requestCode, String url, Class<?> bean, Object param, OnRequestCallback listener, long timeout) {
-        
+    public void post(final int requestCode, String url, final Class<?> bean, Object param, final OnRequestCallback listener, long timeout) {
+        try {
+            RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().toJson(param));
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("content-type", CONTENT_TYPE)
+                    .post(requestBody)
+                    .build();
+            LogUtils.d(url);
+            LogUtils.json(JsonUtil.getInstance().toJson(param));
+            getInstance(timeout).newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(final Call call, final IOException e) {
+                    try {
+                        if (call.request().body() != null) {
+                            LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), String.valueOf(call.request().body().toString()), ""));
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (listener != null) {
+                                    try {
+                                        listener.onFailure(ExceptionCode.NO_INTERNET, requestCode, "数据请求失败");
+                                    } catch (Exception e) {
+                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                    }
+                                }
+                            }
+                        });
+                    } catch (final Exception e1) {
+                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("-1"), String.valueOf(requestCode), String.valueOf(e1.getMessage()), ""));
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (listener != null) {
+                                    try {
+                                        listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据请求失败");
+                                    } catch (Exception e) {
+                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    try {
+                        String json = response.body() == null ? "null" : response.body().string();
+                        LogUtils.json(json);
+                        final Object respObj = JsonUtil.getInstance().fromJson(json, bean);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (listener != null) {
+                                    try {
+                                        if (200 == response.code()) {
+                                            listener.onSuccess(response.code(), requestCode, respObj);
+                                        } else if (response.code() >= 500) {
+                                            listener.onFailure(response.code(), requestCode, "服务器错误");
+                                        } else {
+                                            listener.onFailure(response.code(), requestCode, "网络错误");
+                                        }
+                                    } catch (Exception e) {
+                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                    }
+                                }
+                            }
+                        });
+                    } catch (final Exception e2) {
+                        LogUtils.d("Response Exception -> " + String.format(DEBUG_FORMAT, String.valueOf(response.code()), String.valueOf(requestCode), "null", String.valueOf(e2.getMessage())));
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (listener != null) {
+                                    try {
+                                        listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据解析异常");
+                                    } catch (Exception e) {
+                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } catch (final Exception e3) {
+            LogUtils.d(String.format(DEBUG_FORMAT, "", String.valueOf(requestCode), String.valueOf(e3.getMessage()), ""));
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (listener != null) {
+                        try {
+                            listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, e3.getMessage());
+                        } catch (Exception e) {
+                            LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                        }
+                    }
+                }
+            });
+        }
     }
 }
