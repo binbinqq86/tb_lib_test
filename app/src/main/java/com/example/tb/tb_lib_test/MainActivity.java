@@ -2,6 +2,7 @@ package com.example.tb.tb_lib_test;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
@@ -12,7 +13,7 @@ import com.tb.baselib.util.LogUtils;
 import com.tb.baselib.util.ToastUtils;
 
 public class MainActivity extends BaseActivityWithViewStatus {
-    
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setActivityView(R.layout.activity_main);
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
         
             }
         });
+        LogUtils.e("eeeeeeeee");
     }
     
     @Override

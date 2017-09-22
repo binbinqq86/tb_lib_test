@@ -10,15 +10,35 @@ android {
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    signingConfigs {
+        keyConfig {
+            keyAlias KEY_MOBILE_ALIAS
+            keyPassword KEY_PASSWORD
+            storeFile file(KEY_FILE)
+            storePassword KEY_PASSWORD
+        }
     }
     buildTypes {
         release {
-            buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_RELEASE
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
+            signingConfig signingConfigs.keyConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_RELEASE
+            resValue 'string', 'app_name', "tb库release"
         }
         debug {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            debuggable true
+            signingConfig signingConfigs.keyConfig
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
+            resValue 'string', 'app_name', "tb库debug"
         }
     }
 }
@@ -28,5 +48,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(':moudle_baselib')
+    debugCompile project(path: ':moudle_baselib', configuration: 'debug')
+    releaseCompile project(path: ':moudle_baselib', configuration: 'release')
 }

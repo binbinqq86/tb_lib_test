@@ -13,17 +13,23 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        multiDexEnabled true
     }
     buildTypes {
         release {
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_RELEASE
+            debuggable false
         }
         debug {
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
+            debuggable true
         }
     }
 
+    //限定所有资源前缀名
     resourcePrefix "baselib_"
+    //跟随主项目buildTypes。库默认为release
+    publishNonDefault true
 }
 
 
