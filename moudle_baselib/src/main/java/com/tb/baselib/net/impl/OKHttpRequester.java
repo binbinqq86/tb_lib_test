@@ -3,13 +3,18 @@ package com.tb.baselib.net.impl;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
 import com.tb.baselib.json.JsonUtil;
+import com.tb.baselib.net.BaseResponse;
 import com.tb.baselib.net.interfaces.IApiRequester;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.util.LogUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +33,7 @@ import okhttp3.Response;
  */
 public class OKHttpRequester implements IApiRequester {
     private static final String TAG = "OKHttpRequester";
-    private static final Handler mHandler=new Handler(Looper.getMainLooper());
+    private static final Handler mHandler = new Handler(Looper.getMainLooper());
     private static final long DEFAULT_TIMEOUT = 10 * 1000;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String CONTENT_TYPE = "application/json";
@@ -61,12 +66,12 @@ public class OKHttpRequester implements IApiRequester {
     }
     
     @Override
-    public void post(int requestCode, String url, Class<?> bean, Object param, OnRequestCallback listener) {
-        this.post(requestCode, url, bean, param, listener, DEFAULT_TIMEOUT);
+    public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
+        this.post(requestCode, url, cls, param, callback, DEFAULT_TIMEOUT);
     }
     
     @Override
-    public void post(final int requestCode, String url, final Class<?> bean, Object param, final OnRequestCallback listener, long timeout) {
+    public void post(final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
             RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().toJson(param));
             Request request = new Request.Builder()
@@ -86,9 +91,9 @@ public class OKHttpRequester implements IApiRequester {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (listener != null) {
+                                if (callback != null) {
                                     try {
-                                        listener.onFailure(ExceptionCode.NO_INTERNET, requestCode, "数据请求失败");
+                                        callback.onFailure(ExceptionCode.NO_INTERNET, requestCode, "数据请求失败");
                                     } catch (Exception e) {
                                         LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
@@ -100,9 +105,9 @@ public class OKHttpRequester implements IApiRequester {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (listener != null) {
+                                if (callback != null) {
                                     try {
-                                        listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据请求失败");
+                                        callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据请求失败");
                                     } catch (Exception e) {
                                         LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
@@ -111,24 +116,28 @@ public class OKHttpRequester implements IApiRequester {
                         });
                     }
                 }
-            
+                
                 @Override
                 public void onResponse(Call call, final Response response) throws IOException {
                     try {
-                        String json = response.body() == null ? "null" : response.body().string();
+                        final String json = response.body() == null ? "null" : response.body().string();
                         LogUtils.json(json);
-                        final Object respObj = JsonUtil.getInstance().fromJson(json, bean);
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (listener != null) {
+                                if (callback != null) {
                                     try {
                                         if (200 == response.code()) {
-                                            listener.onSuccess(response.code(), requestCode, respObj);
+                                            Object respObj = JsonUtil.getInstance().fromJson(json, cls);
+                                            if (respObj instanceof BaseResponse) {
+                                                callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());
+                                            } else {
+                                                callback.onSuccess(response.code(), requestCode, respObj);
+                                            }
                                         } else if (response.code() >= 500) {
-                                            listener.onFailure(response.code(), requestCode, "服务器错误");
+                                            callback.onFailure(response.code(), requestCode, "服务器错误");
                                         } else {
-                                            listener.onFailure(response.code(), requestCode, "网络错误");
+                                            callback.onFailure(response.code(), requestCode, "网络错误");
                                         }
                                     } catch (Exception e) {
                                         LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
@@ -141,9 +150,9 @@ public class OKHttpRequester implements IApiRequester {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (listener != null) {
+                                if (callback != null) {
                                     try {
-                                        listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据解析异常");
+                                        callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据解析异常");
                                     } catch (Exception e) {
                                         LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
@@ -158,9 +167,9 @@ public class OKHttpRequester implements IApiRequester {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (listener != null) {
+                    if (callback != null) {
                         try {
-                            listener.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, e3.getMessage());
+                            callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, e3.getMessage());
                         } catch (Exception e) {
                             LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                         }

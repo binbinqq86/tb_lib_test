@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
+import com.tb.baselib.net.ApiRequesterUtil;
+import com.tb.baselib.net.impl.OKHttpRequester;
+import com.tb.baselib.net.interfaces.OnRequestCallback;
+import com.tb.baselib.util.LogUtils;
 import com.tb.baselib.util.ToastUtils;
 
 public class MainActivity extends BaseActivityWithViewStatus {
@@ -31,6 +35,20 @@ public class MainActivity extends BaseActivityWithViewStatus {
             }
         });
 //        showContentView();
+        String url="http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
+        TestParam param=new TestParam();
+        param.pageNo=1;
+        ApiRequesterUtil.getInstance().post(1000, url, TestBean.class, param, new OnRequestCallback() {
+            @Override
+            public void onSuccess(int responseCode, int requestCode, Object response) {
+                LogUtils.e(response.toString());
+            }
+    
+            @Override
+            public void onFailure(int responseCode, int requestCode, String errMsg) {
+        
+            }
+        });
     }
     
     @Override

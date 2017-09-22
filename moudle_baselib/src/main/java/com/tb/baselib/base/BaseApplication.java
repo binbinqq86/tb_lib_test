@@ -17,7 +17,7 @@ public class BaseApplication extends Application{
     public void onCreate() {
         super.onCreate();
         application=this;
-        ToastUtils.init();
+        initComponent();
     }
     
     @Override
@@ -29,5 +29,7 @@ public class BaseApplication extends Application{
     private void initComponent(){
         //初始化日志
         LogUtils.init();
+        //初始化toast
+        ToastUtils.init();
     }
 }
