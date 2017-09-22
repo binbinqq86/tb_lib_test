@@ -33,9 +33,13 @@ public class MainActivity extends BaseActivityWithViewStatus {
             @Override
             public void onClick(View view) {
                 ToastUtils.showBottom("retry click");
+                postTest();
             }
         });
 //        showContentView();
+    }
+    
+    private void postTest() {
         String url="http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
         TestParam param=new TestParam();
         param.pageNo=1;
