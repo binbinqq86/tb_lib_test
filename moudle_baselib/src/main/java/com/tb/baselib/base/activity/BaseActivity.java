@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.tb.baselib.R;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by : tb on 2017/9/19 下午5:10.
  * Description :Activity基类

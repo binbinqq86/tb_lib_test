@@ -15,6 +15,7 @@ import com.tb.baselib.util.LogUtils;
 import com.tb.baselib.util.ToastUtils;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
