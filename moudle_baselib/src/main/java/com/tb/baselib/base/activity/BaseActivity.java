@@ -1,5 +1,6 @@
 package com.tb.baselib.base.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import com.tb.baselib.R;
  * Description :Activity基类
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    protected Context mActivityContext;
+    protected Context mApplicationContext;
     /**
      * 真实的Activity布局
      */
@@ -38,23 +41,28 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 自定义的标题栏视图容器
      */
     private ViewGroup toolbarRootView;
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivityContext = this;
+        mApplicationContext = getApplicationContext();
         initVariables();
         setContentView(R.layout.baselib_base_layout);
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-        toolbarRootView= (ViewGroup) findViewById(R.id.root_toolbar);
-        rootView= (ViewGroup) findViewById(R.id.root_content);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarRootView = (ViewGroup) findViewById(R.id.root_toolbar);
+        rootView = (ViewGroup) findViewById(R.id.root_content);
         initToolbar();
         setSupportActionBar(toolbar);
-        if(toolbarView!=null){
+        if (toolbarView != null) {
             toolbarRootView.addView(toolbarView);
-        }else{
+        } else {
             toolbarRootView.setVisibility(View.GONE);
         }
-        if(contentView==null){
+        if (contentView == null) {
             throw new IllegalArgumentException("please invoke setActivityView(int layoutId) first...");
+        }else {
+            rootView.addView(contentView,0);
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,25 +77,27 @@ public abstract class BaseActivity extends AppCompatActivity {
     
     /**
      * 设置真实的布局内容，放super.onCreate(savedInstanceState)前调用
+     *
      * @param layoutId
      */
-    protected void setActivityView(int layoutId){
-        this.contentLayoutID=layoutId;
-        this.contentView=View.inflate(this,layoutId,null);
+    protected void setActivityView(int layoutId) {
+        this.contentLayoutID = layoutId;
+        this.contentView = View.inflate(this, layoutId, null);
     }
     
     /**
      * 设置自定义的标题栏，放super.onCreate(savedInstanceState)前调用
+     *
      * @param layoutId
      */
-    protected void setToolbarSelfView(int layoutId){
-        this.toolbarView=View.inflate(this,layoutId,null);
+    protected void setToolbarSelfView(int layoutId) {
+        this.toolbarView = View.inflate(this, layoutId, null);
     }
     
     /**
      * 初始化toolbar
      */
-    protected void initToolbar(){
+    protected void initToolbar() {
         
     }
     
@@ -98,6 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     
     /**
      * 加载layout布局文件，初始化控件
+     *
      * @param savedInstanceState
      */
     protected abstract void initViews(Bundle savedInstanceState);
