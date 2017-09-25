@@ -8,13 +8,33 @@ import com.tb.baselib.net.interfaces.IApiRequester;
  * Description :获取一个网络请求的单例工具类
  */
 public class ApiRequesterUtil {
-    private static IApiRequester mInstance;
+    private IApiRequester iApiRequester;
     
-    public static final IApiRequester getInstance() {
+    /**
+     * 设置具体的网络请求策略
+     *
+     * @param iApiRequester
+     * @return
+     */
+    public ApiRequesterUtil setRequestStrategy(IApiRequester iApiRequester) {
+        this.iApiRequester = iApiRequester;
+        return RequesterSingletonHolder.instance;
+    }
+    
+    /**
+     * 默认为okhttp
+     *
+     * @return
+     */
+    public IApiRequester getIApiRequester() {
+        return this.iApiRequester == null ? OKHttpRequester.getInstance() : this.iApiRequester;
+    }
+    
+    public static final ApiRequesterUtil getInstance() {
         return RequesterSingletonHolder.instance;
     }
     
     private static final class RequesterSingletonHolder {
-        private static final IApiRequester instance = new OKHttpRequester();
+        private static final ApiRequesterUtil instance = new ApiRequesterUtil();
     }
 }

@@ -12,6 +12,15 @@ import java.lang.reflect.Type;
  * Description :用来解析json数据的工具类，可替换其他第三方
  */
 public class GsonUtil implements IJson {
+    private GsonUtil(){}
+    
+    public static final GsonUtil getInstance() {
+        return GsonSingletonHolder.instance;
+    }
+    
+    private static final class GsonSingletonHolder {
+        private static final GsonUtil instance = new GsonUtil();
+    }
     private Gson mGson = new Gson();
     
     @Override

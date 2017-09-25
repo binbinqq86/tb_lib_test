@@ -37,13 +37,14 @@ public class MainActivity extends BaseActivityWithViewStatus {
             }
         });
 //        showContentView();
+        postTest();
     }
     
     private void postTest() {
         String url="http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
         TestParam param=new TestParam();
         param.pageNo=1;
-        ApiRequesterUtil.getInstance().post(1000, url, TestBean.class, param, new OnRequestCallback() {
+        ApiRequesterUtil.getInstance().getIApiRequester().post(1000, url, TestBean.class, param, new OnRequestCallback() {
             @Override
             public void onSuccess(int responseCode, int requestCode, Object response) {
                 LogUtils.e(response.toString());

@@ -3,9 +3,6 @@ package com.tb.baselib.net.impl;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
 import com.tb.baselib.json.JsonUtil;
 import com.tb.baselib.net.BaseResponse;
@@ -64,7 +61,15 @@ public class OKHttpRequester implements IApiRequester {
             return client;
         }
     }
+    private OKHttpRequester(){}
     
+    public static final OKHttpRequester getInstance() {
+        return OKHttpSingletonHolder.instance;
+    }
+    
+    private static final class OKHttpSingletonHolder {
+        private static final OKHttpRequester instance = new OKHttpRequester();
+    }
     @Override
     public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, DEFAULT_TIMEOUT);
@@ -73,14 +78,14 @@ public class OKHttpRequester implements IApiRequester {
     @Override
     public void post(final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
-            RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().toJson(param));
+            RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().getJsonUtil().toJson(param));
             Request request = new Request.Builder()
                     .url(url)
                     .addHeader("content-type", CONTENT_TYPE)
                     .post(requestBody)
                     .build();
             LogUtils.d(url);
-            LogUtils.json(JsonUtil.getInstance().toJson(param));
+            LogUtils.json(JsonUtil.getInstance().getJsonUtil().toJson(param));
             getInstance(timeout).newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(final Call call, final IOException e) {
@@ -128,7 +133,7 @@ public class OKHttpRequester implements IApiRequester {
                                 if (callback != null) {
                                     try {
                                         if (200 == response.code()) {
-                                            Object respObj = JsonUtil.getInstance().fromJson(json, cls);
+                                            Object respObj = JsonUtil.getInstance().getJsonUtil().fromJson(json, cls);
                                             if (respObj instanceof BaseResponse) {
                                                 callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());
                                             } else {
