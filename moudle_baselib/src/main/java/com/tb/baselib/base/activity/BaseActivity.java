@@ -88,6 +88,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     
     /**
+     * 设置真实的布局内容，放super.onCreate(savedInstanceState)前调用
+     * @param layout
+     */
+    protected void setActivityView(View layout) {
+        this.contentView = layout;
+    }
+    
+    /**
      * 设置自定义的标题栏，放super.onCreate(savedInstanceState)前调用
      *
      * @param layoutId

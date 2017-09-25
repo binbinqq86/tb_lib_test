@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
-    @BindView(R.id.iv)
     ImageView iv;
     
     @Override
