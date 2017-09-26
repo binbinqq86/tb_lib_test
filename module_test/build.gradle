@@ -1,62 +1,59 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
-        applicationId "com.example.tb.tb_lib_test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
         multiDexEnabled true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [ moduleName : project.getName() ]
             }
         }
     }
-    signingConfigs {
-        keyConfig {
-            keyAlias KEY_MOBILE_ALIAS
-            keyPassword KEY_PASSWORD
-            storeFile file(KEY_FILE)
-            storePassword KEY_PASSWORD
-        }
-    }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
-            debuggable false
-            signingConfig signingConfigs.keyConfig
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_RELEASE
-            resValue 'string', 'app_name', "tb库release"
+            debuggable false
         }
         debug {
-            minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
-            debuggable true
-            signingConfig signingConfigs.keyConfig
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
-            resValue 'string', 'app_name', "tb库debug"
+            debuggable true
         }
     }
 
-    resourcePrefix 'app_'
+    resourcePrefix 'test_'
+    //跟随主项目buildTypes。库默认为release
+    publishNonDefault true
+}
+
+/* 处理 butterknife 在lib中的应用*/
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.jakewharton:butterknife-gradle-plugin:$rootProject.ext.butterknifeVersion"
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-    debugCompile project(path: ':module_test', configuration: 'debug')
-    releaseCompile project(path: ':module_test', configuration: 'release')
+
+    debugCompile project(path: ':module_baselib', configuration: 'debug')
+    releaseCompile project(path: ':module_baselib', configuration: 'release')
 }

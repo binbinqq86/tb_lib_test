@@ -3,15 +3,15 @@ package com.example.tb.tb_lib_test;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
 import com.tb.baselib.image.ImageLoaderUtil;
+import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.net.ApiRequesterUtil;
-import com.tb.baselib.net.impl.OKHttpRequester;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
-import com.tb.baselib.util.LogUtils;
 import com.tb.baselib.util.ToastUtils;
 
 import butterknife.BindView;
@@ -24,15 +24,21 @@ public class MainActivity extends BaseActivityWithViewStatus {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setActivityView(R.layout.activity_main);
-//        setToolbarSelfView(R.layout.activity_main);
+        //使用butterknife
+        View view= View.inflate(this,R.layout.app_activity_main,null);
+        setActivityView(view);
+        ButterKnife.bind(this,view);
+        //不使用butterknife
+//        setActivityView(R.layout.app_activity_main);
+        //设置自定义toolbar
+//        setToolbarSelfView(R.layout.app_activity_main);
         super.onCreate(savedInstanceState);
         //默认点击finish，此处可以重写事件
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.showCenter("111");
-//                Toast.makeText(MainActivity.this,"222",Toast.LENGTH_LONG).show();
+                ToastUtils.showCenter("ARouter test");
+                ActivityLauncher.test(MainActivity.this);
             }
         });
         showLoadingView("loading");
@@ -41,7 +47,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     }
     
     private void imageTest() {
-        Log.e(TAG, "imageTest: " + (iv == null));
+//        Log.e(TAG, "imageTest: " + (iv == null));
         String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png";
         ImageLoaderUtil.getInstance().getIImageDisplay().displayByUrl(mActivityContext, iv, url);
     }
@@ -88,7 +94,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        iv = (ImageView) findViewById(R.id.iv);
+
     }
     
     @Override
