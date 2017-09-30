@@ -1,6 +1,5 @@
 package com.tb.baselib.mvp.presenter;
 
-import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.mvp.view.IBaseView;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
