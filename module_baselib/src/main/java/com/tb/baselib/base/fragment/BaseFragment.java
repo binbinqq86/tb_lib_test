@@ -75,6 +75,9 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
         toolbarRootView = (ViewGroup) view.findViewById(R.id.root_toolbar);
         rootView = (ViewGroup) view.findViewById(R.id.root_content);
         initToolbar();
+        if(!(getActivity() instanceof AppCompatActivity)){
+            throw new IllegalArgumentException("please use AppCompatActivity...");
+        }
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         if (toolbarView != null) {
             toolbarRootView.addView(toolbarView);
