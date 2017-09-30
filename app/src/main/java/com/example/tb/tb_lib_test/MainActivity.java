@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
+import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.net.ApiRequesterUtil;
@@ -41,10 +42,65 @@ public class MainActivity extends BaseActivityWithViewStatus {
                 ActivityLauncher.test(MainActivity.this);
             }
         });
-        showLoadingView("loading");
-//        showLoadEmptyView(R.mipmap.ic_launcher,"empty");
-        postTest();
     }
+    
+    @Override
+    protected void initToolbar() {
+        super.initToolbar();
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        toolbar.setTitle("tb的库测试");
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_launcher_round);
+    }
+    
+    @Override
+    protected void initVariables() {
+        
+    }
+    
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
+
+    }
+    
+    @Override
+    protected void initListeners() {
+        
+    }
+    
+    @Override
+    protected void loadData() {
+        String url = "http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
+        TestParam param = new TestParam();
+        param.pageNo = 1;
+        mBasePresenter.loadData(1000,url,TestBean.class,param);
+    }
+    
+    @Override
+    public void showLoadingView() {
+        showLoadingView("loading");
+    }
+    
+    @Override
+    public void onSuccess(int responseCode, int requestCode, Object response) {
+        //此处也可以显示其他页面，比如空页面等。。。
+        //showLoadEmptyView(R.mipmap.ic_launcher,"empty");
+        showContentView();
+        imageTest();
+    }
+    
+    @Override
+    public void onFailure(int responseCode, int requestCode, String errMsg) {
+        showLoadErrorView(R.mipmap.ic_launcher, errMsg, "retry", 0, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showBottom("retry click");
+                loadData();
+            }
+        });
+    }
+    
     
     private void imageTest() {
 //        Log.e(TAG, "imageTest: " + (iv == null));
@@ -75,35 +131,5 @@ public class MainActivity extends BaseActivityWithViewStatus {
                 });
             }
         });
-    }
-    
-    @Override
-    protected void initToolbar() {
-        super.initToolbar();
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        toolbar.setTitle("tb的库测试");
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
-        toolbar.setLogo(R.mipmap.ic_launcher_round);
-    }
-    
-    @Override
-    protected void initVariables() {
-        
-    }
-    
-    @Override
-    protected void initViews(Bundle savedInstanceState) {
-
-    }
-    
-    @Override
-    protected void initListeners() {
-        
-    }
-    
-    @Override
-    protected void requestData() {
-        
     }
 }

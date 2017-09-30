@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tb.baselib.R;
+import com.tb.baselib.mvp.model.IBaseModel;
+import com.tb.baselib.mvp.presenter.BasePresenterImpl;
+import com.tb.baselib.mvp.view.IBaseView;
+import com.tb.baselib.net.ApiRequesterUtil;
 
 import butterknife.ButterKnife;
 
@@ -16,7 +20,12 @@ import butterknife.ButterKnife;
  * Created by : tb on 2017/9/19 下午5:10.
  * Description :Activity基类
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView{
+    /**
+     * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
+     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
+     */
+    protected BasePresenterImpl mBasePresenter;
     protected Context mActivityContext;
     protected Context mApplicationContext;
     /**
@@ -49,6 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mActivityContext = this;
         mApplicationContext = getApplicationContext();
+        mBasePresenter=new BasePresenterImpl(this, ApiRequesterUtil.getInstance().getIApiRequester());
         initVariables();
         setContentView(R.layout.baselib_base_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
         initViews(savedInstanceState);
         initListeners();
-        requestData();
+        loadData();
     }
     
     /**
@@ -131,5 +141,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 向服务器请求具体数据
      */
-    protected abstract void requestData();
+    protected abstract void loadData();
 }

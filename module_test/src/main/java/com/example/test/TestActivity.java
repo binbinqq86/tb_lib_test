@@ -36,7 +36,22 @@ public class TestActivity extends BaseActivityWithViewStatus{
     }
     
     @Override
-    protected void requestData() {
+    protected void loadData() {
+        
+    }
+    
+    @Override
+    public void showLoadingView() {
+        
+    }
+    
+    @Override
+    public void onSuccess(int responseCode, int requestCode, Object response) {
+        
+    }
+    
+    @Override
+    public void onFailure(int responseCode, int requestCode, String errMsg) {
         
     }
 }

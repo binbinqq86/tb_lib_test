@@ -1,14 +1,14 @@
 package com.tb.baselib.net;
 
 import com.tb.baselib.net.impl.OKHttpRequester;
-import com.tb.baselib.net.interfaces.IApiRequester;
+import com.tb.baselib.mvp.model.IBaseModel;
 
 /**
  * Created by : tb on 2017/9/21 下午4:52.
  * Description :获取一个网络请求的单例工具类
  */
 public class ApiRequesterUtil {
-    private IApiRequester iApiRequester;
+    private IBaseModel iApiRequester;
     
     /**
      * 设置具体的网络请求策略
@@ -16,7 +16,7 @@ public class ApiRequesterUtil {
      * @param iApiRequester
      * @return
      */
-    public ApiRequesterUtil setRequestStrategy(IApiRequester iApiRequester) {
+    public ApiRequesterUtil setRequestStrategy(IBaseModel iApiRequester) {
         this.iApiRequester = iApiRequester;
         return RequesterSingletonHolder.instance;
     }
@@ -26,7 +26,7 @@ public class ApiRequesterUtil {
      *
      * @return
      */
-    public IApiRequester getIApiRequester() {
+    public IBaseModel getIApiRequester() {
         return this.iApiRequester == null ? OKHttpRequester.getInstance() : this.iApiRequester;
     }
     

@@ -1,14 +1,16 @@
-package com.tb.baselib.net.interfaces;
+package com.tb.baselib.mvp.model;
 
 import com.tb.baselib.net.BaseResponse;
+import com.tb.baselib.net.interfaces.OnRequestCallback;
 
 import java.lang.reflect.Type;
 
 /**
  * Created by : tb on 2017/9/21 上午11:37.
  * Description :公共请求接口，具体实现则由具体第三方框架完成(可自由更换网络请求框架)
+ * mvp之model---负责数据的处理和业务逻辑
  */
-public interface IApiRequester {
+public interface IBaseModel {
     
     /**
      * post请求

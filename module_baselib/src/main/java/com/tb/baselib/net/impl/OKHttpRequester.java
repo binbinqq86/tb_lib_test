@@ -6,7 +6,7 @@ import android.os.Looper;
 import com.tb.baselib.constant.ExceptionCode;
 import com.tb.baselib.json.JsonUtil;
 import com.tb.baselib.net.BaseResponse;
-import com.tb.baselib.net.interfaces.IApiRequester;
+import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.util.LogUtils;
 
@@ -28,7 +28,7 @@ import okhttp3.Response;
  * Created by : tb on 2017/9/21 上午11:52.
  * Description :OKHttp实现的具体的请求任务类
  */
-public class OKHttpRequester implements IApiRequester {
+public class OKHttpRequester implements IBaseModel {
     private static final String TAG = "OKHttpRequester";
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
     private static final long DEFAULT_TIMEOUT = 10 * 1000;
