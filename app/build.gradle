@@ -47,7 +47,7 @@ android {
         }
     }
 
-    resourcePrefix 'app_'
+//    resourcePrefix 'app_'
 }
 
 dependencies {

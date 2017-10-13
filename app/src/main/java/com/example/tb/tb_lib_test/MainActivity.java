@@ -2,6 +2,8 @@ package com.example.tb.tb_lib_test;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
     @BindView(R.id.iv)
     ImageView iv;
+    
+    private Handler mHandler=new Handler(Looper.getMainLooper());
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
