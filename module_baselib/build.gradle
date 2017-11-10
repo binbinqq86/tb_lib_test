@@ -50,24 +50,24 @@ buildscript {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
-    compile "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
-    compile "org.greenrobot:eventbus:$rootProject.ext.eventbus"
-    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
-    compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
-    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
-    compile "com.orhanobut:logger:$rootProject.ext.logerVersion"
-    compile "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    testApi "junit:junit:$rootProject.ext.junitVersion"
+    api "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    api "org.greenrobot:eventbus:$rootProject.ext.eventbus"
+    api "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
+    api "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+    api "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    api "com.android.support:multidex:$rootProject.ext.multidexVersion"
+    api "com.orhanobut:logger:$rootProject.ext.logerVersion"
+    api "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    api "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
-    compile "com.alibaba:arouter-api:$rootProject.ext.arouterApiVersion"
+    api "com.alibaba:arouter-api:$rootProject.ext.arouterApiVersion"
 
 }

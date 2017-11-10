@@ -142,4 +142,5 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      * 向服务器请求具体数据
      */
     protected abstract void loadData();
+    
 }

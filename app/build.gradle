@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -47,16 +48,25 @@ android {
         }
     }
 
-//    resourcePrefix 'app_'
+    resourcePrefix 'app_'
+}
+/* 处理 butterknife 在lib中的应用*/
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.jakewharton:butterknife-gradle-plugin:$rootProject.ext.butterknifeVersion"
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-    debugCompile project(path: ':module_test', configuration: 'debug')
-    releaseCompile project(path: ':module_test', configuration: 'release')
+    debugImplementation project(path: ':module_test', configuration: 'debug')
+    releaseImplementation project(path: ':module_test', configuration: 'release')
 }
