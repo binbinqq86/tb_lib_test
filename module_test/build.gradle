@@ -20,6 +20,7 @@ android {
                 arguments = [ moduleName : project.getName() ]
             }
         }
+        resourcePrefix 'test_'
     }
     buildTypes {
         release {
@@ -30,11 +31,10 @@ android {
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
             debuggable true
         }
+        //跟随主项目buildTypes。库默认为release
+        publishNonDefault true
     }
 
-    resourcePrefix 'test_'
-    //跟随主项目buildTypes。库默认为release
-    publishNonDefault true
 }
 
 /* 处理 butterknife 在lib中的应用*/

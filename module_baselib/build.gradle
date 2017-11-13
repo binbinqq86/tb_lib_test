@@ -20,6 +20,8 @@ android {
                 arguments = [ moduleName : project.getName() ]
             }
         }
+        //限定所有资源前缀名
+        resourcePrefix "baselib_"
     }
     buildTypes {
         release {
@@ -30,12 +32,10 @@ android {
             buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
             debuggable true
         }
+        //跟随主项目buildTypes。库默认为release
+        publishNonDefault true
     }
 
-    //限定所有资源前缀名
-    resourcePrefix "baselib_"
-    //跟随主项目buildTypes。库默认为release
-    publishNonDefault true
 }
 
 

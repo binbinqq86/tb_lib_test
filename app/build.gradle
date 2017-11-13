@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
+static def getTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getDefault())
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.example.tb.tb_lib_test"
+        applicationId APPLICATION_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode VERSION_CODE as int
@@ -14,9 +18,10 @@ android {
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ moduleName : project.getName() ]
+                arguments = [moduleName: project.getName()]
             }
         }
+//    resourcePrefix 'app_'
     }
     signingConfigs {
         keyConfig {
@@ -34,8 +39,7 @@ android {
             debuggable false
             signingConfig signingConfigs.keyConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_RELEASE
-            resValue 'string', 'app_name', "tb库release"
+            buildConfigField 'boolean', 'IS_DEBUG_MODE', IS_DEBUG_MODE_RELEASE
         }
         debug {
             minifyEnabled false
@@ -43,12 +47,16 @@ android {
             zipAlignEnabled false
             debuggable true
             signingConfig signingConfigs.keyConfig
-            buildConfigField 'boolean','IS_DEBUG_MODE',IS_DEBUG_MODE_DEBUG
-            resValue 'string', 'app_name', "tb库debug"
+            buildConfigField 'boolean', 'IS_DEBUG_MODE', IS_DEBUG_MODE_DEBUG
         }
     }
 
-//    resourcePrefix 'app_'
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = getTime() + "_" + APP_OUTPUT_NAME + "_" + VERSION_NAME + "_" + variant.buildType.name + ".apk"
+        }
+    }
+
 }
 /* 处理 butterknife 在lib中的应用*/
 buildscript {
