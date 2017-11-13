@@ -7,7 +7,7 @@ import android.support.multidex.MultiDex;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.util.LogUtils;
-import com.tb.baselib.util.ToastUtils;
+import com.tb.baselib.widget.ToastUtils;
 
 /**
  * Created by : tb on 2017/9/20 下午3:40.

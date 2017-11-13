@@ -1,4 +1,4 @@
-package com.tb.baselib.util;
+package com.tb.baselib.widget;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.tb.baselib.R;
 import com.tb.baselib.base.BaseApplication;
+import com.tb.baselib.util.CommonUtils;
 
 /**
  * 全局统一的toast

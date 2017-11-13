@@ -4,22 +4,25 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
-import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.net.ApiRequesterUtil;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
-import com.tb.baselib.util.ToastUtils;
+import com.tb.baselib.widget.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * @auther tb
+ * @time 2017/11/13 下午12:00
+ * @desc
+*/
 public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
     @BindView(R.id.iv)
@@ -91,6 +94,11 @@ public class MainActivity extends BaseActivityWithViewStatus {
         //此处也可以显示其他页面，比如空页面等。。。
         //showLoadEmptyView(R.mipmap.ic_launcher,"empty");
         showContentView();
+//        TextView tv=new TextView(this);
+//        tv.setBackgroundColor(Color.YELLOW);
+//        tv.setText("aaaaa");
+//        tv.setTextSize(33);
+//        showSelfView(tv);
         imageTest();
     }
     

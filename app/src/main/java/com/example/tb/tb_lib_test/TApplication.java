@@ -1,9 +1,6 @@
 package com.example.tb.tb_lib_test;
 
-import android.app.Application;
-
 import com.tb.baselib.base.BaseApplication;
-import com.tb.baselib.util.ToastUtils;
 
 /**
  * Created by : tb on 2017/9/20 下午3:32.

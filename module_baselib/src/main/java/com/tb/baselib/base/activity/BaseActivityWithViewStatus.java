@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tb.baselib.R;
+import com.tb.baselib.widget.CustomProgressDialog;
 
 /**
  * Created by : tb on 2017/9/19 下午5:10.
@@ -162,7 +163,30 @@ public abstract class BaseActivityWithViewStatus extends BaseActivity {
         rootView.addView(selfView, 1);
     }
     
-    protected void showLoadingDialog(){
+    /**
+     * 显示加载框
+     */
+    protected void showLoadingDialog() {
+        CustomProgressDialog.show(mActivityContext, false, false, null);
+    }
     
+    /**
+     * 显示加载框
+     *
+     * @param canCancel
+     * @param canCancelOnTouchOutside
+     * @param text 不传递则显示默认"加载中..."字样
+     */
+    protected void showLoadingDialog(boolean canCancel, boolean canCancelOnTouchOutside, String text) {
+        CustomProgressDialog.show(mActivityContext, canCancel, canCancelOnTouchOutside, text);
+    }
+    
+    /**
+     * 关闭加载框
+     */
+    protected void hideLoadingDialog() {
+        if (!isFinishing()) {
+            CustomProgressDialog.close();
+        }
     }
 }
