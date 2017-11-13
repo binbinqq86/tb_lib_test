@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by : tb on 2017/9/19 下午5:10.
  * Description :Activity基类
  */
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView{
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
     /**
      * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
      * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
@@ -58,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         super.onCreate(savedInstanceState);
         mActivityContext = this;
         mApplicationContext = getApplicationContext();
-        mBasePresenter=new BasePresenterImpl(this, ApiRequesterUtil.getInstance().getIApiRequester());
+        mBasePresenter = new BasePresenterImpl(this, ApiRequesterUtil.getInstance().getIApiRequester());
         initVariables();
         setContentView(R.layout.baselib_base_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,8 +73,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         }
         if (contentView == null) {
             throw new IllegalArgumentException("please invoke setActivityView(int layoutId) first...");
-        }else {
-            rootView.addView(contentView,0);
+        } else {
+            rootView.addView(contentView, 0);
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     
     /**
      * 设置真实的布局内容，放super.onCreate(savedInstanceState)前调用
+     *
      * @param layout
      */
     protected void setActivityView(View layout) {
@@ -143,4 +144,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      */
     protected abstract void loadData();
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBasePresenter != null) {
+            mBasePresenter.detachView();
+            mBasePresenter = null;
+        }
+    }
 }

@@ -75,7 +75,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
         toolbarRootView = (ViewGroup) view.findViewById(R.id.root_toolbar);
         rootView = (ViewGroup) view.findViewById(R.id.root_content);
         initToolbar();
-        if(!(getActivity() instanceof AppCompatActivity)){
+        if (!(getActivity() instanceof AppCompatActivity)) {
             throw new IllegalArgumentException("please use AppCompatActivity...");
         }
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -157,4 +157,13 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
      * 向服务器请求具体数据
      */
     protected abstract void loadData();
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mBasePresenter != null) {
+            mBasePresenter.detachView();
+            mBasePresenter = null;
+        }
+    }
 }

@@ -32,4 +32,6 @@ public interface IBasePresenter {
             , final String url
             , final Type cls
             , final Object param);
+    
+    void detachView();
 }
