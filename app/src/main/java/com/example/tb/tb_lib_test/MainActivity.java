@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     protected void initToolbar() {
         super.initToolbar();
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        toolbar.setTitle("tb的库测试");
+        toolbar.setTitle(getString(R.string.app_name));
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         toolbar.setLogo(R.mipmap.ic_launcher_round);

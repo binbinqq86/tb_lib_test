@@ -55,6 +55,5 @@ dependencies {
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
 
-    debugImplementation project(path: ':module_baselib', configuration: 'debug')
-    releaseImplementation project(path: ':module_baselib', configuration: 'release')
+    implementation project(':module_baselib')
 }

@@ -48,7 +48,7 @@ android {
         }
     }
 
-    resourcePrefix 'app_'
+//    resourcePrefix 'app_'
 }
 /* 处理 butterknife 在lib中的应用*/
 buildscript {
@@ -67,6 +67,5 @@ dependencies {
     })
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-    debugImplementation project(path: ':module_test', configuration: 'debug')
-    releaseImplementation project(path: ':module_test', configuration: 'release')
+    implementation project(':module_baselib')
 }
