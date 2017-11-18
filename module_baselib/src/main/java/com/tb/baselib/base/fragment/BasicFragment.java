@@ -3,6 +3,7 @@ package com.tb.baselib.base.fragment;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.tb.baselib.util.EventBusHelper;
 
@@ -14,15 +15,16 @@ import org.greenrobot.eventbus.ThreadMode;
  * Description :注册eventBus，用不到eventBus无需继承此类，仍继承{@link BaseFragmentWithViewStatus}即可
  */
 public abstract class BasicFragment extends BaseFragmentWithViewStatus {
+    
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         EventBusHelper.register(this);
     }
     
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         EventBusHelper.unregister(this);
     }
     

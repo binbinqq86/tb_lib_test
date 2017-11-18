@@ -15,6 +15,10 @@ import com.tb.baselib.widget.ToastUtils;
  */
 public class BaseApplication extends Application{
     public static BaseApplication application;
+    /**
+     * 取包名最后一位
+     */
+    public static String LAST_PACKAGE_NAME;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,6 +33,9 @@ public class BaseApplication extends Application{
     }
     
     private void initComponent(){
+        //获取包名最后一位
+        String str[]=getPackageName().split(".");
+        LAST_PACKAGE_NAME=str[str.length-1];
         //初始化日志
         LogUtils.init();
         //初始化toast
