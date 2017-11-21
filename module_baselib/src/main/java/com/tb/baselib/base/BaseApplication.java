@@ -3,6 +3,7 @@ package com.tb.baselib.base;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.tb.baselib.BuildConfig;
@@ -14,6 +15,7 @@ import com.tb.baselib.widget.ToastUtils;
  * Description :
  */
 public class BaseApplication extends Application{
+    private static final String TAG = "BaseApplication";
     public static BaseApplication application;
     /**
      * 取包名最后一位
@@ -34,7 +36,7 @@ public class BaseApplication extends Application{
     
     private void initComponent(){
         //获取包名最后一位
-        String str[]=getPackageName().split(".");
+        String str[]=getPackageName().split("\\.");
         LAST_PACKAGE_NAME=str[str.length-1];
         //初始化日志
         LogUtils.init();
