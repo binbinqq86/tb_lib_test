@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by : tb on 2017/9/19 下午5:10.
  * Description :Activity基类
  */
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView, View.OnClickListener {
     /**
      * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
      * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
@@ -143,6 +143,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      * 向服务器请求具体数据
      */
     protected abstract void loadData();
+    
+    @Override
+    public void onClick(View v) {
+    
+    }
     
     @Override
     protected void onDestroy() {

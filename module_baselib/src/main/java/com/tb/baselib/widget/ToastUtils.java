@@ -58,7 +58,7 @@ public class ToastUtils {
         if (mToast == null) {
             return;
         }
-        mToast.setGravity(Gravity.BOTTOM, 0, (int) CommonUtils.getDP(64));
+        mToast.setGravity(Gravity.BOTTOM, 0, (int) CommonUtils.dp2Px(64));
         mMessageTv.setText(msg);
         mToast.show();
     }

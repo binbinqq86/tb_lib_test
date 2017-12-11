@@ -23,6 +23,7 @@ public class CustomProgressDialog extends Dialog{
     private static CustomProgressDialog instance;
     public CustomProgressDialog(@NonNull Context context) {
         super(context, R.style.baselib_progressLoadingDialog);
+        init();
     }
     
     private void init(){

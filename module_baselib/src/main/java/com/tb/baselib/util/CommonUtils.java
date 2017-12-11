@@ -15,7 +15,7 @@ public class CommonUtils {
      * @param dp
      * @return
      */
-    public static float getDP(float dp){
+    public static float dp2Px(float dp){
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp, BaseApplication.application.getResources().getDisplayMetrics());
     }
 }

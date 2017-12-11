@@ -20,7 +20,7 @@ import com.tb.baselib.net.ApiRequesterUtil;
  * Created by : tb on 2017/9/20 下午4:33.
  * Description :fragment基类
  */
-public abstract class BaseFragment extends Fragment implements IBaseView {
+public abstract class BaseFragment extends Fragment implements IBaseView, View.OnClickListener {
     /**
      * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
      * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
@@ -157,6 +157,11 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
      * 向服务器请求具体数据
      */
     protected abstract void loadData();
+    
+    @Override
+    public void onClick(View v) {
+    
+    }
     
     @Override
     public void onDestroy() {
