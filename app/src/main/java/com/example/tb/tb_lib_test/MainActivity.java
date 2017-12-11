@@ -15,6 +15,8 @@ import com.tb.baselib.net.ApiRequesterUtil;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.widget.ToastUtils;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,7 +29,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
     @BindView(R.id.iv)
     ImageView iv;
-    
+    @BindView(R.id.textView)
+    TextView textView;
     private Handler mHandler=new Handler(Looper.getMainLooper());
     
     @Override
@@ -78,7 +81,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     
     @Override
     protected void loadData() {
-        String url = "http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
+        String url = "http://www.rohun.top:8080/smart/api/v1/dict";
         TestParam param = new TestParam();
         param.pageNo = 1;
         mBasePresenter.loadData(1000,url,TestBean.class,param);
@@ -99,6 +102,12 @@ public class MainActivity extends BaseActivityWithViewStatus {
 //        tv.setText("aaaaa");
 //        tv.setTextSize(33);
 //        showSelfView(tv);
+
+//        ArrayList<TestBean> bean= (ArrayList<TestBean>) response;
+//        textView.setText(bean.get(0).getName()+"\n"+bean.get(0).getJson());
+        
+        TestBean bean= (TestBean) response;
+        textView.setText(bean.getName()+"\n"+bean.getJson());
         imageTest();
     }
     

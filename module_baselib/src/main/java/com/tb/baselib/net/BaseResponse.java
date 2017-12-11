@@ -12,9 +12,9 @@ public class BaseResponse<T> extends BaseBean{
      */
     private int code;
     /**
-     * 错误信息
+     * 返回信息
      */
-    private String errMsg;
+    private String message;
     /**
      * 实体数据
      */
@@ -28,12 +28,12 @@ public class BaseResponse<T> extends BaseBean{
         this.code = code;
     }
     
-    public String getErrMsg() {
-        return errMsg;
+    public String getMessage() {
+        return message;
     }
     
-    public void setErrMsg(String errMsg) {
-        this.errMsg = errMsg;
+    public void setMessage(String errMsg) {
+        this.message = errMsg;
     }
     
     public T getData() {
@@ -48,7 +48,7 @@ public class BaseResponse<T> extends BaseBean{
     public String toString() {
         return "BaseResponse{" +
                 "code=" + code +
-                ", errMsg='" + errMsg + '\'' +
+                ", message='" + message + '\'' +
                 ", data=" + data +
                 '}';
     }

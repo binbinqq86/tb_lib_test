@@ -61,7 +61,9 @@ public class OKHttpRequester implements IBaseModel {
             return client;
         }
     }
-    private OKHttpRequester(){}
+    
+    private OKHttpRequester() {
+    }
     
     public static final OKHttpRequester getInstance() {
         return OKHttpSingletonHolder.instance;
@@ -70,6 +72,7 @@ public class OKHttpRequester implements IBaseModel {
     private static final class OKHttpSingletonHolder {
         private static final OKHttpRequester instance = new OKHttpRequester();
     }
+    
     @Override
     public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, DEFAULT_TIMEOUT);
@@ -133,7 +136,16 @@ public class OKHttpRequester implements IBaseModel {
                                 if (callback != null) {
                                     try {
                                         if (200 == response.code()) {
-                                            Object respObj = JsonUtil.getInstance().getJsonUtil().fromJson(json, cls);
+                                            //此处只处理了data 为 object 的情况{"code":"0","message":"success","data":{}}的情况
+                                            //data 为 array 的情况{"code":"0","message":"success","data":[]}的情况需另作处理（new TypeToken<ArrayList<JavaBean>>(){}.getType()）
+                                            //简易处理方式如下：
+                                            Object respObj = null;
+                                            //String json="{\"code\":0,\"message\":\"success\",\"data\":[{\"name\":\"tb\",\"json\":\"mock\"}]}";
+                                            if (json.replace(" ", "").contains("\"data\":{")) {
+                                                respObj = JsonUtil.getInstance().getJsonUtil().fromJson(json, cls);
+                                            } else if (json.replace(" ", "").contains("\"data\":[")) {
+                                                respObj = JsonUtil.getInstance().getJsonUtil().fromJsonArray(json, cls);
+                                            }
                                             if (respObj instanceof BaseResponse) {
                                                 callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());
                                             } else {

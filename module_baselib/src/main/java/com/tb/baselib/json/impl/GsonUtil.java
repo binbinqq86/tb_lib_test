@@ -6,13 +6,15 @@ import com.tb.baselib.net.BaseResponse;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by : tb on 2017/9/21 下午3:25.
  * Description :用来解析json数据的工具类，可替换其他第三方
  */
 public class GsonUtil implements IJson {
-    private GsonUtil(){}
+    private GsonUtil() {
+    }
     
     public static final GsonUtil getInstance() {
         return GsonSingletonHolder.instance;
@@ -21,6 +23,7 @@ public class GsonUtil implements IJson {
     private static final class GsonSingletonHolder {
         private static final GsonUtil instance = new GsonUtil();
     }
+    
     private Gson mGson = new Gson();
     
     @Override
@@ -36,6 +39,11 @@ public class GsonUtil implements IJson {
     @Override
     public Object fromJson(String json, Type type) {
         return mGson.fromJson(json, getType(BaseResponse.class, type));
+    }
+    
+    @Override
+    public Object fromJsonArray(String json, Type type) {
+        return mGson.fromJson(json, getType(BaseResponse.class, getType(List.class, type)));
     }
     
     /**
