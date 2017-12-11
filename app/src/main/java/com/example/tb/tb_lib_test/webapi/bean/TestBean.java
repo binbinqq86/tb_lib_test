@@ -1,4 +1,4 @@
-package com.example.tb.tb_lib_test;
+package com.example.tb.tb_lib_test.webapi.bean;
 
 import com.tb.baselib.base.BaseBean;
 
@@ -6,7 +6,7 @@ import com.tb.baselib.base.BaseBean;
  * Created by : tb on 2017/9/22 上午11:22.
  * Description :
  */
-public class TestBean extends BaseBean{
+public class TestBean extends TestBaseBean{
     
     /**
      * name : mainDict

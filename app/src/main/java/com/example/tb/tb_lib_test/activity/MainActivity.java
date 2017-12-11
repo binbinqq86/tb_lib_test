@@ -1,4 +1,4 @@
-package com.example.tb.tb_lib_test;
+package com.example.tb.tb_lib_test.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,14 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.tb.tb_lib_test.R;
+import com.example.tb.tb_lib_test.webapi.api.Api;
+import com.example.tb.tb_lib_test.webapi.bean.TestBean;
+import com.example.tb.tb_lib_test.webapi.param.TestParam;
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
-import com.tb.baselib.net.ApiRequesterUtil;
-import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.widget.ToastUtils;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,10 +81,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
     
     @Override
     protected void loadData() {
-        String url = "http://www.rohun.top:8080/smart/api/v1/dict";
         TestParam param = new TestParam();
-        param.pageNo = 1;
-        mBasePresenter.loadData(1000,url,TestBean.class,param);
+        mBasePresenter.loadData(1000, Api.URL_TEST,TestBean.class,param);
     }
     
     @Override
@@ -122,35 +120,9 @@ public class MainActivity extends BaseActivityWithViewStatus {
         });
     }
     
-    
     private void imageTest() {
 //        Log.e(TAG, "imageTest: " + (iv == null));
         String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png";
         ImageLoaderUtil.getInstance().getIImageDisplay().displayByUrl(mActivityContext, iv, url);
-    }
-    
-    private void postTest() {
-        String url = "http://pre.jcyapi.easybao.com/api/easybao/mobile/public/page/v1";
-        TestParam param = new TestParam();
-        param.pageNo = 1;
-        ApiRequesterUtil.getInstance().getIApiRequester().post(1000, url, TestBean.class, param, new OnRequestCallback() {
-            @Override
-            public void onSuccess(int responseCode, int requestCode, Object response) {
-//                LogUtils.e(response.toString());
-                showContentView();
-                imageTest();
-            }
-            
-            @Override
-            public void onFailure(int responseCode, int requestCode, String errMsg) {
-                showLoadErrorView(R.mipmap.ic_launcher, "error", "retry", 0, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ToastUtils.showBottom("retry click");
-                        postTest();
-                    }
-                });
-            }
-        });
     }
 }

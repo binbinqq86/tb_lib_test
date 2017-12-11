@@ -40,6 +40,7 @@ android {
             signingConfig signingConfigs.keyConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'boolean', 'IS_DEBUG_MODE', IS_DEBUG_MODE_RELEASE
+            buildConfigField 'String', 'TEST_API_URL', TEST_API_URL_RELEASE
         }
         debug {
             minifyEnabled false
@@ -48,6 +49,7 @@ android {
             debuggable true
             signingConfig signingConfigs.keyConfig
             buildConfigField 'boolean', 'IS_DEBUG_MODE', IS_DEBUG_MODE_DEBUG
+            buildConfigField 'String', 'TEST_API_URL', TEST_API_URL_DEBUG
         }
     }
 
