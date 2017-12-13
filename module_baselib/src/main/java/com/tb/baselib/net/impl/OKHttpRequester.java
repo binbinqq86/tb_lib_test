@@ -3,6 +3,7 @@ package com.tb.baselib.net.impl;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
 import com.tb.baselib.json.JsonUtil;
 import com.tb.baselib.net.BaseResponse;
@@ -83,7 +84,7 @@ public class OKHttpRequester implements IBaseModel {
         try {
             RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().getJsonUtil().toJson(param));
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(BaseConstant.BASE_API_URL + url)
                     .addHeader("content-type", CONTENT_TYPE)
                     .post(requestBody)
                     .build();

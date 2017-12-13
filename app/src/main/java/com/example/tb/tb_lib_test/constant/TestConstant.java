@@ -8,8 +8,5 @@ import com.example.tb.tb_lib_test.BuildConfig;
  * @desc
  */
 public class TestConstant {
-    /**
-     * 模块API请求基类地址
-     */
-    public static final String TEST_API_BASE_URL = BuildConfig.TEST_API_URL + "/smart";
+
 }

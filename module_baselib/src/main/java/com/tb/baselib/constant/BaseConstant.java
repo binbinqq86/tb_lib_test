@@ -5,4 +5,8 @@ package com.tb.baselib.constant;
  * Description :常量类
  */
 public class BaseConstant {
+    /**
+     * 网络请求api的服务器地址前缀
+     */
+    public static String BASE_API_URL;
 }

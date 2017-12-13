@@ -12,6 +12,7 @@ import com.example.tb.tb_lib_test.R;
 import com.example.tb.tb_lib_test.webapi.api.Api;
 import com.example.tb.tb_lib_test.webapi.bean.TestBean;
 import com.example.tb.tb_lib_test.webapi.param.TestParam;
+import com.google.gson.Gson;
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
@@ -52,6 +53,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
                 ActivityLauncher.test(MainActivity.this);
             }
         });
+        textView.setOnClickListener(this);
     }
     
     @Override
@@ -80,9 +82,19 @@ public class MainActivity extends BaseActivityWithViewStatus {
     }
     
     @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()){
+            case R.id.textView:
+                ToastUtils.showBottom("hello world...");
+                break;
+        }
+    }
+    
+    @Override
     protected void loadData() {
         TestParam param = new TestParam();
-        mBasePresenter.loadData(1000, Api.URL_TEST,TestBean.class,param);
+        mBasePresenter.loadData(1000, Api.getInstance().URL_TEST,TestBean.class,param);
     }
     
     @Override

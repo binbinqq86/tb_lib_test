@@ -1,3 +1,28 @@
+#不能混淆的项
+#在AndroidManifest中配置的类，比如四大组件
+#JNI调用的方法
+#反射用到的类
+#WebView中JavaScript调用的方法
+#Layout文件引用到的自定义View
+#一些引入的第三方库
+
+#关键字                       描述
+#keep                        保留类和类中的成员，防止被混淆或移除
+#keepnames                   保留类和类中的成员，防止被混淆，成员没有被引用会被移除
+#keepclassmembers            只保留类中的成员，防止被混淆或移除
+#keepclassmembernames        只保留类中的成员，防止被混淆，成员没有引用会被移除
+#keepclasseswithmembers      保留类和类中的成员，防止被混淆或移除，保留指明的成员
+#keepclasseswithmembernames  保留类和类中的成员，防止被混淆，保留指明的成员，成员没有引用会被移除
+
+#通配符       描述
+#<field>     匹配类中的所有字段
+#<method>    匹配类中所有的方法
+#<init>      匹配类中所有的构造函数
+#*           匹配任意长度字符，不包含包名分隔符(.)
+#**          匹配任意长度字符，包含包名分隔符(.)
+#***         匹配任意参数类型
+#...         匹配任意长度的任意类型参数。比如void test(…)就能匹配任意void test(String a)或者是void test(int a, String b)这些方法。
+
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
 # in /Users/tb/Library/Android/sdk/tools/proguard/proguard-android.txt
@@ -43,7 +68,7 @@
 -printmapping mapping.txt
 #指定混淆时采用的算法，后面的参数是一个过滤器，这个过滤器是谷歌推荐的算法，一般不改变
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
-#保护代码中的Annotation不被混淆，这在JSON实体映射时非常重要
+#保护代码中的Annotation不被混淆，这在JSON实体映射时非常重要(保留注解参数)
 -keepattributes *Annotation*
 #避免混淆泛型，这在JSON实体映射时非常重要
 -keepattributes Signature
@@ -54,6 +79,32 @@
 -ignorewarnings
 
 ###################需要保留的东西########################################
+
+#保留反射的方法和类不被混淆(以下三种方案都可以)================================================
+#1.传统方案，如果涉及地方比较多，则该混淆文件会很乱，不可取
+#-keepclassmembers class com.example.tb.tb_lib_test.webapi.api.Api {
+#    private void setBaseApiUrl(java.lang.String);
+#}
+#2.自定义注解，所有使用此注解的均不被混淆，包含类，方法，变量。
+# keep annotated by NoProguard
+##手动启用support NoProguard注解（必须开启allowobfuscation，保证该注解生效）
+-keep,allowobfuscation @interface com.tb.baselib.annotation.noproguard.NoProguard
+-keep @com.tb.baselib.annotation.noproguard.NoProguard class * { *;}
+-keepclassmembers class * {
+    @com.tb.baselib.annotation.noproguard.NoProguard *;
+}
+#3.使用系统提供的
+#手动启用support keep注解
+#http://tools.android.com/tech-docs/support-annotations
+-dontskipnonpubliclibraryclassmembers
+-printconfiguration
+-keep,allowobfuscation @interface android.support.annotation.Keep
+-keep @android.support.annotation.Keep class *
+-keepclassmembers class * {
+    @android.support.annotation.Keep *;
+}
+#==========================================================================================
+
 #保留所有的本地native方法不被混淆
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -69,6 +120,7 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 -keep public class * extends com.android.vending.licensing.ILicensingService
+-keep class android.support.** {*;}
 
 #保留在Activity中的方法参数是view的方法，从而我们在layout里面便携onClick就不会受影响
 -keepclassmembers class * extends android.app.Activity{
@@ -106,6 +158,10 @@
 #对于R（资源）下的所有类及其方法，都不能被混淆
 -keep class **.R$*{
     *;
+}
+#R文件中的所有记录资源id的静态字段
+-keepclassmembers class **.R$* {
+    public static <fields>;
 }
 #对于带有回调函数onXXEvent的，不能被混淆
 -keepclassmembers class * {
@@ -165,20 +221,25 @@
 -keep class android.webkit.**{*;}
 -dontwarn org.apache.http.**
 
-#ARouter
+#ARouter=================================================================================
 -keep public class com.alibaba.android.arouter.routes.**{*;}
 -keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
 
+# 如果使用了 byType 的方式获取 Service，需添加下面规则，保护接口
+-keep interface * implements com.alibaba.android.arouter.facade.template.IProvider
 
-# OkHttp3
--dontwarn com.squareup.okhttp3.**
--keep class com.squareup.okhttp3.** { *;}
--dontwarn okio.**
+# 如果使用了 单类注入，即不定义接口实现 IProvider，需添加下面规则，保护实现
+-keep class * implements com.alibaba.android.arouter.facade.template.IProvider
 
-# Okio
--dontwarn com.squareup.**
+
+# OkHttp3=================================================================================
+-dontwarn okhttp3.**
 -dontwarn okio.**
--keep public class org.codehaus.* { *; }
--keep public class java.nio.* { *; }
+-dontwarn javax.annotation.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Okio====================================================================================
+-dontwarn okio.**
 
 
