@@ -15,8 +15,8 @@
 #keepclasseswithmembernames  保留类和类中的成员，防止被混淆，保留指明的成员，成员没有引用会被移除
 
 #通配符       描述
-#<field>     匹配类中的所有字段
-#<method>    匹配类中所有的方法
+#<fields>     匹配类中的所有字段
+#<methods>    匹配类中所有的方法
 #<init>      匹配类中所有的构造函数
 #*           匹配任意长度字符，不包含包名分隔符(.)
 #**          匹配任意长度字符，包含包名分隔符(.)
@@ -88,7 +88,8 @@
 #2.自定义注解，所有使用此注解的均不被混淆，包含类，方法，变量。
 # keep annotated by NoProguard
 ##手动启用support NoProguard注解（必须开启allowobfuscation，保证该注解生效）
--keep,allowobfuscation @interface com.tb.baselib.annotation.noproguard.NoProguard
+#-keep,allowobfuscation @interface com.tb.baselib.annotation.noproguard.NoProguard
+-keep class com.tb.baselib.annotation.noproguard.NoProguard
 -keep @com.tb.baselib.annotation.noproguard.NoProguard class * { *;}
 -keepclassmembers class * {
     @com.tb.baselib.annotation.noproguard.NoProguard *;
@@ -96,12 +97,16 @@
 #3.使用系统提供的
 #手动启用support keep注解
 #http://tools.android.com/tech-docs/support-annotations
--dontskipnonpubliclibraryclassmembers
--printconfiguration
--keep,allowobfuscation @interface android.support.annotation.Keep
--keep @android.support.annotation.Keep class *
--keepclassmembers class * {
-    @android.support.annotation.Keep *;
+-keep class android.support.annotation.Keep
+-keep @android.support.annotation.Keep class * {*;}
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <methods>;
+}
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <fields>;
+}
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <init>(...);
 }
 #==========================================================================================
 
@@ -112,6 +117,7 @@
 #保留了继承自Activity、Application这些类的子类
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Fragment
+-keep public class * extends android.support.v4.app.Fragment
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
@@ -143,7 +149,7 @@
 -keep class * implements android.os.Paracelable{
     public static final android.os.Paracelable$Creator *;
 }
-#保留Serializable序列化的类不被混淆
+#保留Serializable序列化的类的如下成员不被混淆
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
@@ -168,7 +174,7 @@
     void *(**On*Event);
 }
 
-#============================针对app的量身定制===================
+#============================针对app的量身定制=============================================
 
 # webView处理，项目中没有使用到webView忽略即可
 -keepclassmembers class * extends android.webkit.webViewClient {
@@ -179,47 +185,47 @@
     public void *(android.webkit.webView, java.lang.String);
 }
 
-#gson
+#Gson===================================================================================
 -keep public class com.google.gson.**
 -keep public class com.google.gson.** {public private protected *;}
 -keep class sun.misc.Unsafe { *; }
 
-#Glide
+# Prevent proguard from stripping interface information from TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+#Glide=================================================================================
 -keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }
 
-#EventBus
+# for DexGuard only
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+#EventBus=================================================================================
+#-keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
 
-#butterknife
+#Butterknife=================================================================================
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
 }
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
-
-#-------------AndroidEventbus----------------
--keep class org.simple.** { *; }
--keep interface org.simple.** { *; }
--keepclassmembers class * {
-    @org.simple.eventbus.Subscriber <methods>;
-}
-
-# httpclient
--keep class org.apache.http.** { *; }
--keep class android.net.http.SslError
--keep class android.webkit.**{*;}
--dontwarn org.apache.http.**
 
 #ARouter=================================================================================
 -keep public class com.alibaba.android.arouter.routes.**{*;}
@@ -240,6 +246,6 @@
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # Okio====================================================================================
--dontwarn okio.**
+#-dontwarn okio.**
 
 

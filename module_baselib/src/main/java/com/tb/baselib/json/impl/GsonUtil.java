@@ -1,5 +1,7 @@
 package com.tb.baselib.json.impl;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.Gson;
 import com.tb.baselib.json.IJson;
 import com.tb.baselib.net.BaseResponse;
