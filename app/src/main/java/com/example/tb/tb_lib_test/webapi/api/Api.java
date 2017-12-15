@@ -1,11 +1,10 @@
 package com.example.tb.tb_lib_test.webapi.api;
 
-import android.support.annotation.Keep;
-
 import com.example.tb.tb_lib_test.BuildConfig;
-import com.tb.baselib.annotation.baseapi.BaseApiUrl;
-import com.tb.baselib.annotation.baseapi.InjectBaseApiUrl;
-import com.tb.baselib.annotation.noproguard.NoProguard;
+import com.tb.annotation.annotation.BaseApiUrl;
+import com.tb.annotation.annotation.NoProguard;
+import com.tb.annotation.api.InjectHelper;
+import com.tb.annotation.compiler.InjectBaseApiUrl;
 import com.tb.baselib.constant.BaseConstant;
 
 /**
@@ -16,7 +15,8 @@ import com.tb.baselib.constant.BaseConstant;
 @BaseApiUrl(BuildConfig.TEST_API_URL + "/smart")
 public class Api {
     private Api() {
-        InjectBaseApiUrl.injectBaseUrl(this);
+//        InjectBaseApiUrl.injectBaseUrl(this);
+        InjectHelper.inject(this);
     }
     
     public static Api getInstance() {

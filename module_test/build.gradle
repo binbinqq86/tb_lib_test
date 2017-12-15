@@ -34,7 +34,10 @@ android {
         //跟随主项目buildTypes。库默认为release
         publishNonDefault true
     }
-
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaCompileVersion
+        targetCompatibility rootProject.ext.javaCompileVersion
+    }
 }
 
 /* 处理 butterknife 在lib中的应用*/

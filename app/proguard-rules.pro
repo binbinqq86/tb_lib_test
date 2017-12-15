@@ -88,11 +88,11 @@
 #2.自定义注解，所有使用此注解的均不被混淆，包含类，方法，变量。
 # keep annotated by NoProguard
 ##手动启用support NoProguard注解（必须开启allowobfuscation，保证该注解生效）
-#-keep,allowobfuscation @interface com.tb.baselib.annotation.noproguard.NoProguard
--keep class com.tb.baselib.annotation.noproguard.NoProguard
--keep @com.tb.baselib.annotation.noproguard.NoProguard class * { *;}
+#-keep,allowobfuscation @interface com.tb.annotation.annotation.NoProguard
+-keep class com.tb.annotation.annotation.NoProguard
+-keep @com.tb.annotation.annotation.NoProguard class * { *;}
 -keepclassmembers class * {
-    @com.tb.baselib.annotation.noproguard.NoProguard *;
+    @com.tb.annotation.annotation.NoProguard *;
 }
 #3.使用系统提供的
 #手动启用support keep注解

@@ -1,4 +1,4 @@
-package com.tb.baselib.annotation.noproguard;
+package com.tb.annotation.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/module_annotation" />
             <option value="$PROJECT_DIR$/module_baselib" />
             <option value="$PROJECT_DIR$/module_test" />
           </set>

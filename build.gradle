@@ -36,9 +36,10 @@ ext {
     multidexVersion = "1.0.1"
     logerVersion = "2.1.1"
     butterknifeVersion = "8.4.0"
-    constraintLayoutVersion="1.0.2"
+    constraintLayoutVersion = "1.0.2"
     arouterCompileVersion = "1.1.2"
     arouterApiVersion = "1.2.1.1"
+    javaCompileVersion = JavaVersion.VERSION_1_7
 }
 
 task clean(type: Delete) {

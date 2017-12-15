@@ -58,7 +58,10 @@ android {
             outputFileName = getTime() + "_" + APP_OUTPUT_NAME + "_" + VERSION_NAME + "_" + variant.buildType.name + ".apk"
         }
     }
-
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaCompileVersion
+        targetCompatibility rootProject.ext.javaCompileVersion
+    }
 }
 /* 处理 butterknife 在lib中的应用*/
 buildscript {
@@ -79,4 +82,5 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     implementation project(':module_baselib')
     implementation project(':module_test')
+    annotationProcessor project(':module_annotation')
 }

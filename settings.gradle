@@ -1,1 +1,1 @@
-include ':app', ':module_baselib', ':module_test'
+include ':app', ':module_baselib', ':module_test', ':module_annotation'

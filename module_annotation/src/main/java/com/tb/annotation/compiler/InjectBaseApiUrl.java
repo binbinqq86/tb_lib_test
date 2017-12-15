@@ -1,4 +1,6 @@
-package com.tb.baselib.annotation.baseapi;
+package com.tb.annotation.compiler;
+
+import com.tb.annotation.annotation.BaseApiUrl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

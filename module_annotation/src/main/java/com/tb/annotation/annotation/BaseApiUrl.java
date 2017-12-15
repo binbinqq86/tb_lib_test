@@ -1,4 +1,4 @@
-package com.tb.baselib.annotation.baseapi;
+package com.tb.annotation.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @desc 用来通过注解获取baseApiUrl的annotation
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface BaseApiUrl {
     /**
      * @return 返回网络请求地址的前缀
