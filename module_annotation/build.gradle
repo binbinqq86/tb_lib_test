@@ -3,7 +3,7 @@ apply plugin: 'java-library'
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api 'com.google.auto.service:auto-service:1.0-rc2'
+    sourceCompatibility = rootProject.ext.javaCompileVersion
+    targetCompatibility = rootProject.ext.javaCompileVersion
 }
 
-sourceCompatibility = rootProject.ext.javaCompileVersion
-targetCompatibility = rootProject.ext.javaCompileVersion

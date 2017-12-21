@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @time 2017/12/13 下午3:09
  * @desc 用来通过注解获取baseApiUrl的annotation
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
 public @interface BaseApiUrl {
     /**

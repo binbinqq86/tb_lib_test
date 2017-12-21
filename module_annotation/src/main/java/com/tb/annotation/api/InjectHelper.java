@@ -1,6 +1,6 @@
 package com.tb.annotation.api;
 
-import java.lang.reflect.Constructor;
+import com.tb.annotation.info.ProxyInfo;
 
 /**
  * @auther tb
@@ -8,14 +8,19 @@ import java.lang.reflect.Constructor;
  * @desc
  */
 public class InjectHelper {
-    public static void inject(Object host) {
-        String classFullName = host.getClass().getName() + "$$InjectBaseUrl";
+    public static void inject(Object o) {
+        inject(o, o);
+    }
+    
+    public static void inject(Object host, Object root) {
+        String classFullName = host.getClass().getName() +"_"+ ProxyInfo.PROXY;
         try {
             Class proxy = Class.forName(classFullName);
-            Constructor constructor = proxy.getConstructor(host.getClass());
-            constructor.newInstance(host);
+            InjectBaseUrl injector = (InjectBaseUrl) proxy.newInstance();
+            injector.inject(host, root);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 }

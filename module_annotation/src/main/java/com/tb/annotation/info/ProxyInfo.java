@@ -1,11 +1,8 @@
 package com.tb.annotation.info;
 
-import java.util.List;
+import com.tb.annotation.api.InjectBaseUrl;
 
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.util.Elements;
 
 /**
  * @auther tb
@@ -14,65 +11,51 @@ import javax.lang.model.util.Elements;
  */
 public class ProxyInfo {
     /**
-     * 一个类的全部变量信息
+     * 类
      */
-    public List<ClassInfo> list;
+    public TypeElement typeElement;
+    /**
+     * 某个变量的值
+     */
+    public Object value;
+    public String packageName;
     
-    public static class ClassInfo {
-        /**
-         * 某个变量的类型和名称
-         */
-        public VariableElement variableElement;
-        /**
-         * 某个变量的值
-         */
-        public Object value;
-    }
-    
-    private String packageName;
-    private String proxyClassName;
-    private TypeElement typeElement;
-    
-    public static final String PROXY = "InjectBaseUrl";
-    
-    public ProxyInfo(Elements elementUtils, TypeElement classElement) {
-        this.typeElement = classElement;
-        String packageName = elementUtils.getPackageOf(classElement).getQualifiedName().toString();
-        //classname
-        String className = classElement.getQualifiedName().toString().substring(packageName.length() + 1).replace('.', '$');
-        this.packageName = packageName;
-        this.proxyClassName = className + "$$" + PROXY;
-    }
+    public static final String PROXY = InjectBaseUrl.class.getSimpleName();
     
     public String getProxyClassFullName() {
-        return packageName + "." + proxyClassName;
+        return typeElement.getQualifiedName().toString() + "_" + PROXY;
     }
     
-    public TypeElement getTypeElement() {
-        return typeElement;
+    public String getClassName() {
+        return typeElement.getSimpleName().toString() + "_" + PROXY;
     }
     
     public String generateJavaCode() {
         StringBuilder builder = new StringBuilder();
         builder.append("// Generated code. Do not modify!\n");
         builder.append("package ").append(packageName).append(";\n\n");
-        builder.append("import com.tb.annotation.*;\n");
         builder.append("import com.tb.baselib.constant.BaseConstant;\n");
+        builder.append("import com.tb.annotation.api.InjectBaseUrl;\n");
         builder.append('\n');
         
-        builder.append("public class ").append(proxyClassName);
+        builder.append("public class ").append(getClassName()).append(" implements " + ProxyInfo.PROXY + "<" + typeElement.getQualifiedName() + ">");
         builder.append(" {\n");
-    
-        for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).variableElement.getSimpleName().equals("BASE_API_URL")){
-                //只处理我们目前的情况，其他情况需另行拓展
-                builder.append("BaseConstant.BASE_API_URL=").append(list.get(i).value).append(";\n");
-            }
-        }
+        
+        generateMethod(builder);
+        
         builder.append('\n');
         
         builder.append("}\n");
         return builder.toString();
+    }
+    
+    private void generateMethod(StringBuilder builder) {
+        builder.append("@Override\n ");
+        builder.append("public void inject(" + typeElement.getQualifiedName() + " host, Object source ) {\n");
+        
+        builder.append("BaseConstant.BASE_API_URL=\"").append(value).append("\";\n");
+        
+        builder.append("  }\n");
     }
     
 }

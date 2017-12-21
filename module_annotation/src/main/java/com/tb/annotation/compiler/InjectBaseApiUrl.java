@@ -8,8 +8,9 @@ import java.lang.reflect.Method;
 /**
  * @auther tb
  * @time 2017/12/13 下午3:11
- * @desc 用来处理获取网络请求前缀的注解的compiler
+ * @desc 用来处理获取网络请求前缀的注解的compiler(运行时专用，已废弃)
  */
+@Deprecated
 public class InjectBaseApiUrl {
     public static void injectBaseUrl(Object obj) {
         Class<?> cls = obj.getClass();

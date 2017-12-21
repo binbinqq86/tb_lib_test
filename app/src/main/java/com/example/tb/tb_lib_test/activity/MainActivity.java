@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     @Override
     protected void loadData() {
         TestParam param = new TestParam();
-        mBasePresenter.loadData(1000, Api.getInstance().URL_TEST,TestBean.class,param);
+        mBasePresenter.loadData(1000, Api.URL_TEST,TestBean.class,param);
     }
     
     @Override

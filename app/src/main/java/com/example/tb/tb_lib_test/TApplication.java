@@ -1,5 +1,6 @@
 package com.example.tb.tb_lib_test;
 
+import com.example.tb.tb_lib_test.webapi.api.Api;
 import com.tb.baselib.base.BaseApplication;
 
 /**
@@ -10,5 +11,13 @@ public class TApplication extends BaseApplication{
     @Override
     public void onCreate() {
         super.onCreate();
+        init();
+    }
+    
+    private void init() {
+        /**
+         * 初始化服务器API前缀
+         */
+        Api.getInstance();
     }
 }

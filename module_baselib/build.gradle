@@ -73,5 +73,5 @@ dependencies {
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouterCompileVersion"
     api "com.alibaba:arouter-api:$rootProject.ext.arouterApiVersion"
     api project(':module_annotation')
-
+    annotationProcessor project(':module_annotation')
 }
