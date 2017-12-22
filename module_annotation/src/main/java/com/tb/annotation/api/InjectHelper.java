@@ -13,7 +13,7 @@ public class InjectHelper {
     }
     
     public static void inject(Object host, Object root) {
-        String classFullName = host.getClass().getName() +"_"+ ProxyInfo.PROXY;
+        String classFullName = host.getClass().getName() + ProxyInfo.ClassSuffix;
         try {
             Class proxy = Class.forName(classFullName);
             InjectBaseUrl injector = (InjectBaseUrl) proxy.newInstance();

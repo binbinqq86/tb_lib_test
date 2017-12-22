@@ -1,5 +1,7 @@
 package com.tb.baselib.constant;
 
+import com.tb.annotation.annotation.NoProguard;
+
 /**
  * Created by : tb on 2017/9/19 下午5:13.
  * Description :常量类

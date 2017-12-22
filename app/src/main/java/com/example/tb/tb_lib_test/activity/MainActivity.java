@@ -14,6 +14,7 @@ import com.example.tb.tb_lib_test.webapi.bean.TestBean;
 import com.example.tb.tb_lib_test.webapi.param.TestParam;
 import com.google.gson.Gson;
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
+import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.widget.ToastUtils;
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
         super.onClick(v);
         switch (v.getId()){
             case R.id.textView:
-                ToastUtils.showBottom("hello world...");
+                ToastUtils.showBottom(BaseConstant.BASE_API_URL);
                 break;
         }
     }

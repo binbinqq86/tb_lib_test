@@ -13,6 +13,7 @@ import com.tb.baselib.constant.BaseConstant;
  * @desc application中调用getInstance初始化服务器api前缀
  */
 @BaseApiUrl(BuildConfig.TEST_API_URL + "/smart")
+@NoProguard
 public class Api {
     private Api() {
 //        InjectBaseApiUrl.injectBaseUrl(this);
