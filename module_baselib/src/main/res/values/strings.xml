@@ -4,4 +4,7 @@
     <string name="baselib_loading_error">页面加载失败</string>
     <string name="baselib_loading_retry">重试</string>
     <string name="baselib_loading_empty">暂无相关内容</string>
+    
+    <string name="baselib_cancel">取消</string>
+    <string name="baselib_confirm">确定</string>
 </resources>

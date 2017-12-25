@@ -3,6 +3,7 @@ package com.tb.baselib.util;
 import android.content.Context;
 import android.util.TypedValue;
 
+import com.tb.baselib.R;
 import com.tb.baselib.base.BaseApplication;
 
 /**

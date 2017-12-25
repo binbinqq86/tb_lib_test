@@ -1,6 +1,9 @@
 package com.example.tb.tb_lib_test.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +20,7 @@ import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
 import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.image.ImageLoaderUtil;
 import com.tb.baselib.manager.ActivityLauncher;
+import com.tb.baselib.manager.PermissionMgr;
 import com.tb.baselib.widget.ToastUtils;
 
 import butterknife.BindView;
@@ -88,6 +92,14 @@ public class MainActivity extends BaseActivityWithViewStatus {
         switch (v.getId()){
             case R.id.textView:
                 ToastUtils.showBottom(BaseConstant.BASE_API_URL);
+                PermissionMgr.checkCallPhonePermission(MainActivity.this, new PermissionMgr.PermissionGrantListener() {
+                    @Override
+                    public void permissionHasGranted(String permission) {
+                        Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:17085347782"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        MainActivity.this.startActivity(intent);
+                    }
+                });
                 break;
         }
     }
