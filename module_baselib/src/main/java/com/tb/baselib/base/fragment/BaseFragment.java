@@ -21,10 +21,6 @@ import com.tb.baselib.net.ApiRequesterUtil;
  * Description :fragment基类
  */
 public abstract class BaseFragment extends Fragment implements IBaseView, View.OnClickListener {
-    /**
-     * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
-     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
-     */
     protected BasePresenterImpl mBasePresenter;
     protected Context mContext;
     protected Context mApplicationContext;
@@ -53,6 +49,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
      */
     private ViewGroup toolbarRootView;
     
+    private IBaseModel iBaseModel;
+    
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -63,7 +61,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBasePresenter = new BasePresenterImpl(this, ApiRequesterUtil.getInstance().getIApiRequester());
+        setIBaseModel(ApiRequesterUtil.getInstance().getIApiRequester());
+        mBasePresenter = new BasePresenterImpl(this, iBaseModel);
         initVariables();
     }
     
@@ -85,7 +84,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
             toolbarRootView.setVisibility(View.GONE);
         }
         if (contentView == null) {
-            throw new IllegalArgumentException("please invoke setActivityView(int layoutId) first...");
+            throw new NullPointerException("contentView must not be null,please invoke setActivityView(int layoutId) first...");
         } else {
             rootView.addView(contentView, 0);
         }
@@ -161,6 +160,16 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
     @Override
     public void onClick(View v) {
     
+    }
+    
+    /**
+     * 设置网络请求框架，默认为okHttp3
+     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
+     *
+     * @param iBaseModel
+     */
+    protected void setIBaseModel(IBaseModel iBaseModel) {
+        this.iBaseModel = iBaseModel;
     }
     
     @Override

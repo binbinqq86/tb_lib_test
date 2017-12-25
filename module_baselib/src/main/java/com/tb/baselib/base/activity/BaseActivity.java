@@ -21,10 +21,6 @@ import butterknife.ButterKnife;
  * Description :Activity基类
  */
 public abstract class BaseActivity extends AppCompatActivity implements IBaseView, View.OnClickListener {
-    /**
-     * 默认已经采用okhttp实现，子类也可以通过自定义presenter来设置自己的网络请求框架
-     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
-     */
     protected BasePresenterImpl mBasePresenter;
     protected Context mActivityContext;
     protected Context mApplicationContext;
@@ -53,12 +49,15 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      */
     private ViewGroup toolbarRootView;
     
+    private IBaseModel iBaseModel;
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityContext = this;
         mApplicationContext = getApplicationContext();
-        mBasePresenter = new BasePresenterImpl(this, ApiRequesterUtil.getInstance().getIApiRequester());
+        setIBaseModel(ApiRequesterUtil.getInstance().getIApiRequester());
+        mBasePresenter = new BasePresenterImpl(this, iBaseModel);
         initVariables();
         setContentView(R.layout.baselib_base_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
             toolbarRootView.setVisibility(View.GONE);
         }
         if (contentView == null) {
-            throw new IllegalArgumentException("please invoke setActivityView(int layoutId) first...");
+            throw new NullPointerException("contentView must not be null,please invoke setActivityView(int layoutId) first...");
         } else {
             rootView.addView(contentView, 0);
         }
@@ -147,6 +146,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     @Override
     public void onClick(View v) {
     
+    }
+    
+    /**
+     * 设置网络请求框架，默认为okHttp3
+     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
+     *
+     * @param iBaseModel
+     */
+    protected void setIBaseModel(IBaseModel iBaseModel) {
+        this.iBaseModel = iBaseModel;
     }
     
     @Override
