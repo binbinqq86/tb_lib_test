@@ -120,7 +120,6 @@ public class OKHttpRequester implements IBaseModel {
                     .url(BaseConstant.BASE_API_URL + url)
                     .addHeader("content-type", CONTENT_TYPE);
             if (param != null) {
-                //此处get和post统一处理，根据有没有param来判断
                 String jsonParam = JsonUtil.getInstance().getJsonUtil().toJson(param);
                 RequestBody requestBody = RequestBody.create(JSON, jsonParam);
                 LogUtils.json(jsonParam);

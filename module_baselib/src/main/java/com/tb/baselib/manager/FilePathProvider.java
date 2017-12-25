@@ -13,7 +13,7 @@ public class FilePathProvider {
      *
      * @return
      */
-    private boolean isExternalEnable() {
+    public static boolean isExternalEnable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !Environment.isExternalStorageRemovable();
     }
 }
