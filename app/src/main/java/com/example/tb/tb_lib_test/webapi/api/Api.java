@@ -12,7 +12,7 @@ import com.tb.baselib.constant.BaseConstant;
  * @time 2017/12/7 下午3:59
  * @desc application中调用getInstance初始化服务器api前缀
  */
-@BaseApiUrl(BuildConfig.TEST_API_URL + "/smart")
+@BaseApiUrl(BuildConfig.TEST_API_URL + "/smart/")
 @NoProguard
 public class Api {
     private Api() {
@@ -41,6 +41,6 @@ public class Api {
     /**
      * 测试api地址
      */
-    public static final String URL_TEST = "/api/v1/dict";
+    public static final String URL_TEST = "api/v1/dict";
     
 }
