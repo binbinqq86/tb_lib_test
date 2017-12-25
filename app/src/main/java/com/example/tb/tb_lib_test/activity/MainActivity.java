@@ -1,5 +1,6 @@
 package com.example.tb.tb_lib_test.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,21 +31,21 @@ import butterknife.ButterKnife;
  * @auther tb
  * @time 2017/11/13 下午12:00
  * @desc
-*/
+ */
 public class MainActivity extends BaseActivityWithViewStatus {
     private static final String TAG = "MainActivity";
     @BindView(R.id.iv)
     ImageView iv;
     @BindView(R.id.textView)
     TextView textView;
-    private Handler mHandler=new Handler(Looper.getMainLooper());
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //使用butterknife
-        View view= View.inflate(this,R.layout.app_activity_main,null);
+        View view = View.inflate(this, R.layout.app_activity_main, null);
         setActivityView(view);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         //不使用butterknife
 //        setActivityView(R.layout.app_activity_main);
         //设置自定义toolbar
@@ -78,7 +79,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     
     @Override
     protected void initViews(Bundle savedInstanceState) {
-
+    
     }
     
     @Override
@@ -89,13 +90,14 @@ public class MainActivity extends BaseActivityWithViewStatus {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.textView:
                 ToastUtils.showBottom(BaseConstant.BASE_API_URL);
                 PermissionMgr.checkCallPhonePermission(MainActivity.this, new PermissionMgr.PermissionGrantListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void permissionHasGranted(String permission) {
-                        Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:17085347782"));
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:17085347782"));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         MainActivity.this.startActivity(intent);
                     }
@@ -107,7 +109,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
     @Override
     protected void loadData() {
         TestParam param = new TestParam();
-        mBasePresenter.loadData(1000, Api.URL_TEST,TestBean.class,param);
+//        mBasePresenter.loadData(1000, Api.URL_TEST, TestBean.class, param);
+        mBasePresenter.loadData(1001, Api.URL_TEST, TestBean.class, null,BaseConstant.GET);
     }
     
     @Override
@@ -129,8 +132,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
 //        ArrayList<TestBean> bean= (ArrayList<TestBean>) response;
 //        textView.setText(bean.get(0).getName()+"\n"+bean.get(0).getJson());
         
-        TestBean bean= (TestBean) response;
-        textView.setText(bean.getName()+"\n"+bean.getJson());
+        TestBean bean = (TestBean) response;
+        textView.setText(bean.getName() + "\n" + bean.getJson());
         imageTest();
     }
     

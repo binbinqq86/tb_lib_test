@@ -12,6 +12,7 @@ import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.util.LogUtils;
 
 import java.io.IOException;
+import java.lang.annotation.Retention;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
@@ -32,7 +33,6 @@ import okhttp3.Response;
 public class OKHttpRequester implements IBaseModel {
     private static final String TAG = "OKHttpRequester";
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
-    private static final long DEFAULT_TIMEOUT = 10 * 1000;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String CONTENT_TYPE = "application/json";
     private static final String DEBUG_FORMAT = "RESP CODE: %1$s, RESQ CODE %2$s, JSON:%3$s, EXCEPTION:%4$s";
@@ -76,20 +76,64 @@ public class OKHttpRequester implements IBaseModel {
     
     @Override
     public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
-        this.post(requestCode, url, cls, param, callback, DEFAULT_TIMEOUT);
+        this.post(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
     public void post(final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
+        doRequest(BaseConstant.POST, requestCode, url, cls, param, callback, timeout);
+    }
+    
+    @Override
+    public void get(int requestCode, String url, Type cls, OnRequestCallback callback) {
+        this.get(requestCode, url, cls, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+    }
+    
+    @Override
+    public void get(int requestCode, String url, Type cls, OnRequestCallback callback, long timeout) {
+        doRequest(BaseConstant.GET, requestCode, url, cls, null, callback, timeout);
+    }
+    
+    @Override
+    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+        this.delete(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+    }
+    
+    @Override
+    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+        doRequest(BaseConstant.DELETE, requestCode, url, cls, param, callback, timeout);
+    }
+    
+    @Override
+    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+        this.put(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+    }
+    
+    @Override
+    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+        doRequest(BaseConstant.PUT, requestCode, url, cls, param, callback, timeout);
+    }
+    
+    private void doRequest(final String type, final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
-            RequestBody requestBody = RequestBody.create(JSON, JsonUtil.getInstance().getJsonUtil().toJson(param));
-            Request request = new Request.Builder()
+            Request.Builder builder = new Request.Builder()
                     .url(BaseConstant.BASE_API_URL + url)
-                    .addHeader("content-type", CONTENT_TYPE)
-                    .post(requestBody)
-                    .build();
-            LogUtils.d(url);
-            LogUtils.json(JsonUtil.getInstance().getJsonUtil().toJson(param));
+                    .addHeader("content-type", CONTENT_TYPE);
+            if (param != null) {
+                //此处get和post统一处理，根据有没有param来判断
+                String jsonParam = JsonUtil.getInstance().getJsonUtil().toJson(param);
+                RequestBody requestBody = RequestBody.create(JSON, jsonParam);
+                LogUtils.json(jsonParam);
+                if (type.equalsIgnoreCase(BaseConstant.POST)) {
+                    builder.post(requestBody);
+                } else if (type.equalsIgnoreCase(BaseConstant.PUT)) {
+                    builder.put(requestBody);
+                } else if (type.equalsIgnoreCase(BaseConstant.DELETE)) {
+                    builder.delete(requestBody);
+                }
+            }
+            Request request = builder.build();
+            LogUtils.d("method:" + type + "===" + url);
             getInstance(timeout).newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(final Call call, final IOException e) {

@@ -45,4 +45,97 @@ public interface IBaseModel {
             , final OnRequestCallback callback
             , final long timeout
     );
+    
+    /**
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param callback    回调监听
+     */
+    void get(final int requestCode
+            , final String url
+            , final Type cls
+            , final OnRequestCallback callback);
+    
+    
+    /**
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param callback    回调监听
+     * @param timeout     超时时间
+     */
+    void get(final int requestCode
+            , final String url
+            , final Type cls
+            , final OnRequestCallback callback
+            , final long timeout);
+    
+    /**
+     * post请求
+     *
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param param       请求参数
+     * @param callback    回调监听
+     */
+    void delete(final int requestCode
+            , final String url
+            , final Type cls
+            , final Object param
+            , final OnRequestCallback callback
+    );
+    
+    /**
+     * post请求
+     *
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param param       请求参数
+     * @param callback    回调监听
+     * @param timeout     超时时间
+     */
+    void delete(final int requestCode
+            , final String url
+            , final Type cls
+            , final Object param
+            , final OnRequestCallback callback
+            , final long timeout
+    );
+    
+    /**
+     * post请求
+     *
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param param       请求参数
+     * @param callback    回调监听
+     */
+    void put(final int requestCode
+            , final String url
+            , final Type cls
+            , final Object param
+            , final OnRequestCallback callback
+    );
+    
+    /**
+     * post请求
+     *
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param param       请求参数
+     * @param callback    回调监听
+     * @param timeout     超时时间
+     */
+    void put(final int requestCode
+            , final String url
+            , final Type cls
+            , final Object param
+            , final OnRequestCallback callback
+            , final long timeout
+    );
 }

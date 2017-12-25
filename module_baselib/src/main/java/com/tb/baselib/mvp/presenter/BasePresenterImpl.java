@@ -1,5 +1,9 @@
 package com.tb.baselib.mvp.presenter;
 
+import android.text.TextUtils;
+import android.view.TextureView;
+
+import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.mvp.view.IBaseView;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
@@ -50,12 +54,40 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
      * @param param       请求参数
+     * @param type        请求类型(get,post,delete,put...)
      * @param timeout     超时时间
      */
     @Override
-    public void loadData(int requestCode, String url, Type cls, Object param, long timeout) {
+    public void loadData(int requestCode, String url, Type cls, Object param, String type, long timeout) {
         iBaseView.showLoadingView();
-        iBaseModel.post(requestCode, url, cls, param, this, timeout);
+        if (TextUtils.isEmpty(type)) {
+            type = BaseConstant.POST;//默认为post
+        }
+        if (type.equalsIgnoreCase(BaseConstant.GET)) {
+            iBaseModel.get(requestCode, url, cls, this, timeout);
+        } else if (type.equalsIgnoreCase(BaseConstant.POST)) {
+            iBaseModel.post(requestCode, url, cls, param, this, timeout);
+        } else if (type.equalsIgnoreCase(BaseConstant.DELETE)) {
+        
+        } else if (type.equalsIgnoreCase(BaseConstant.PUT)) {
+        
+        } else {
+        
+        }
+    }
+    
+    /**
+     * model来负责具体的数据请求和逻辑
+     *
+     * @param requestCode 请求code
+     * @param url         请求地址
+     * @param cls         服务器返回真实数据类型
+     * @param param       请求参数
+     * @param type        请求类型(get,post,delete,put...)
+     */
+    @Override
+    public void loadData(int requestCode, String url, Type cls, Object param, String type) {
+        loadData(requestCode, url, cls, param, type, BaseConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     /**
