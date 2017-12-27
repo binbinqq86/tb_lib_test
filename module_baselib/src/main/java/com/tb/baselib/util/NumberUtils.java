@@ -117,7 +117,7 @@ public class NumberUtils {
      * @return
      */
     public static String formatMoney(Object money, boolean isFen, int num) {
-        String pattern = "#,##0";
+        String pattern = "###,##0";
         if (num == 1) {
             pattern += ".0";
         } else if (num == 2) {
@@ -136,9 +136,9 @@ public class NumberUtils {
             BigDecimal bigDecimal = new BigDecimal(mMoney);
             try {
                 if (isFen) {
-                    return decimalFormat.format(bigDecimal.divide(new BigDecimal(100)), new StringBuffer(), new FieldPosition(0)).toString();
+                    return decimalFormat.format(bigDecimal.divide(new BigDecimal(100), num, BigDecimal.ROUND_DOWN)).toString();
                 } else {
-                    return decimalFormat.format(bigDecimal, new StringBuffer(), new FieldPosition(0)).toString();
+                    return decimalFormat.format(bigDecimal.setScale(num, BigDecimal.ROUND_DOWN)).toString();
                 }
             } catch (ArithmeticException e) {
                 return value;

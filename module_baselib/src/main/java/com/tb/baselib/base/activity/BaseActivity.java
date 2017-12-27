@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tb.baselib.R;
+import com.tb.baselib.listener.NoDoubleClickListener;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.mvp.presenter.BasePresenterImpl;
 import com.tb.baselib.mvp.view.IBaseView;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by : tb on 2017/9/19 下午5:10.
  * Description :Activity基类
  */
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView, View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
     protected BasePresenterImpl mBasePresenter;
     protected Context mActivityContext;
     protected Context mApplicationContext;
@@ -50,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     private ViewGroup toolbarRootView;
     
     private IBaseModel iBaseModel;
+    protected NoDoubleClickListener noDoubleClickListener;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +85,17 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         });
         initViews(savedInstanceState);
         initListeners();
+        initNoDoubleClickListener();
         loadData();
+    }
+    
+    private void initNoDoubleClickListener() {
+        noDoubleClickListener = new NoDoubleClickListener() {
+            @Override
+            public void onNoDoubleClick(View view) {
+                BaseActivity.this.onNoDoubleClick(view);
+            }
+        };
     }
     
     /**
@@ -143,9 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      */
     protected abstract void loadData();
     
-    @Override
-    public void onClick(View v) {
-    
+    protected void onNoDoubleClick(View v) {
     }
     
     /**

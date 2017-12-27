@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
                 ActivityLauncher.test(MainActivity.this);
             }
         });
-        textView.setOnClickListener(this);
+        textView.setOnClickListener(noDoubleClickListener);
     }
     
     @Override
@@ -88,8 +88,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
     }
     
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    protected void onNoDoubleClick(View v) {
+        super.onNoDoubleClick(v);
         switch (v.getId()) {
             case R.id.textView:
                 ToastUtils.showBottom(BaseConstant.BASE_API_URL);

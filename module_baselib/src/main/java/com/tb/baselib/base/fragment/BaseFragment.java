@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tb.baselib.R;
+import com.tb.baselib.listener.NoDoubleClickListener;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.mvp.presenter.BasePresenterImpl;
 import com.tb.baselib.mvp.view.IBaseView;
@@ -20,7 +21,7 @@ import com.tb.baselib.net.ApiRequesterUtil;
  * Created by : tb on 2017/9/20 下午4:33.
  * Description :fragment基类
  */
-public abstract class BaseFragment extends Fragment implements IBaseView, View.OnClickListener {
+public abstract class BaseFragment extends Fragment implements IBaseView {
     protected BasePresenterImpl mBasePresenter;
     protected Context mContext;
     protected Context mApplicationContext;
@@ -50,6 +51,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
     private ViewGroup toolbarRootView;
     
     private IBaseModel iBaseModel;
+    protected NoDoubleClickListener noDoubleClickListener;
     
     @Override
     public void onAttach(Context context) {
@@ -96,8 +98,18 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
         });
         initViews(savedInstanceState);
         initListeners();
+        initNoDoubleClickListener();
         loadData();
         return view;
+    }
+    
+    private void initNoDoubleClickListener() {
+        noDoubleClickListener = new NoDoubleClickListener() {
+            @Override
+            public void onNoDoubleClick(View view) {
+                BaseFragment.this.onNoDoubleClick(view);
+            }
+        };
     }
     
     /**
@@ -157,9 +169,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView, View.O
      */
     protected abstract void loadData();
     
-    @Override
-    public void onClick(View v) {
     
+    protected void onNoDoubleClick(View v) {
     }
     
     /**
