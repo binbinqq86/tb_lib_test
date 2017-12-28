@@ -191,6 +191,21 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     }
     
     @Override
+    public void onSuccess(int responseCode, int requestCode, Object response) {
+    
+    }
+    
+    @Override
+    public void onFailure(int responseCode, int requestCode, String errMsg) {
+    
+    }
+    
+    @Override
+    public void showLoadingView() {
+    
+    }
+    
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mBasePresenter != null) {
