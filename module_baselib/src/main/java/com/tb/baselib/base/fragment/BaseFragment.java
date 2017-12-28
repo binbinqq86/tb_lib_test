@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 }
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
+            } catch (InflateException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -117,6 +120,8 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                     toolbarRootView.setVisibility(View.GONE);
                 }
             } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            } catch (InflateException e) {
                 e.printStackTrace();
             }
         }
@@ -197,6 +202,21 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
      */
     protected void setIBaseModel() {
         this.iBaseModel = ApiRequesterUtil.getInstance().getIApiRequester();
+    }
+    
+    @Override
+    public void onSuccess(int responseCode, int requestCode, Object response) {
+    
+    }
+    
+    @Override
+    public void onFailure(int responseCode, int requestCode, String errMsg) {
+    
+    }
+    
+    @Override
+    public void showLoadingView() {
+    
     }
     
     @Override

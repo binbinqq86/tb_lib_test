@@ -43,8 +43,12 @@ public abstract class BaseFragmentWithViewStatus extends BaseFragment {
         }
         rootView.getChildAt(0).setVisibility(View.GONE);
         View emptyView = View.inflate(mContext, R.layout.baselib_layout_loading_empty, null);
-        if (imgId != 0) {
-            ((ImageView) emptyView.findViewById(R.id.baselib_iv_loading_empty)).setImageResource(imgId);
+        if (imgId > 0) {
+            try {
+                ((ImageView) emptyView.findViewById(R.id.baselib_iv_loading_empty)).setImageResource(imgId);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         if (!TextUtils.isEmpty(emptyText)) {
             ((TextView) emptyView.findViewById(R.id.baselib_tv_loading_empty)).setText(emptyText);
@@ -84,14 +88,22 @@ public abstract class BaseFragmentWithViewStatus extends BaseFragment {
         rootView.getChildAt(0).setVisibility(View.GONE);
         View errorView = View.inflate(mContext, R.layout.baselib_layout_loading_error, null);
         
-        if (imgId != 0) {
-            ((ImageView) errorView.findViewById(R.id.baselib_iv_loading_error)).setImageResource(imgId);
+        if (imgId > 0) {
+            try {
+                ((ImageView) errorView.findViewById(R.id.baselib_iv_loading_error)).setImageResource(imgId);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         if (!TextUtils.isEmpty(errText)) {
             ((TextView) errorView.findViewById(R.id.baselib_tv_loading_error)).setText(errText);
         }
-        if (btBg != 0) {
-            ((Button) errorView.findViewById(R.id.baselib_bt_loading_retry)).setBackgroundResource(btBg);
+        if (btBg > 0) {
+            try {
+                ((Button) errorView.findViewById(R.id.baselib_bt_loading_retry)).setBackgroundResource(btBg);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         if (!TextUtils.isEmpty(btText)) {
             ((Button) errorView.findViewById(R.id.baselib_bt_loading_retry)).setText(btText);

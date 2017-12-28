@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.InflateException;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -87,6 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                 }
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
+            } catch (InflateException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -109,6 +112,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                     toolbarRootView.setVisibility(View.GONE);
                 }
             } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            } catch (InflateException e) {
                 e.printStackTrace();
             }
         }
