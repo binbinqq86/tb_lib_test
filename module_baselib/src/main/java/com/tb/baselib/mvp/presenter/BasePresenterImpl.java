@@ -48,7 +48,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     }
     
     /**
-     * model来负责具体的数据请求和逻辑
+     * model来负责具体的数据请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -77,7 +77,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     }
     
     /**
-     * model来负责具体的数据请求和逻辑
+     * model来负责具体的数据请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -91,7 +91,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     }
     
     /**
-     * model来负责具体的数据请求和逻辑
+     * model来负责具体的数据请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
