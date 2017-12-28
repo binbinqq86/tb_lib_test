@@ -1,6 +1,7 @@
 package com.tb.baselib.base.fragment;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -63,32 +64,61 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setIBaseModel(ApiRequesterUtil.getInstance().getIApiRequester());
+        setIBaseModel();
         mBasePresenter = new BasePresenterImpl(this, iBaseModel);
         initVariables();
+        initNoDoubleClickListener();
     }
     
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.baselib_base_layout, container, false);
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbarRootView = (ViewGroup) view.findViewById(R.id.root_toolbar);
-        rootView = (ViewGroup) view.findViewById(R.id.root_content);
-        initToolbar();
         if (!(getActivity() instanceof AppCompatActivity)) {
             throw new IllegalArgumentException("please use AppCompatActivity...");
         }
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        if (toolbarView != null) {
-            toolbarRootView.addView(toolbarView);
-        } else {
-            toolbarRootView.setVisibility(View.GONE);
+        setUpToolbar(view);
+        setUpContentView(view);
+        initViews(this.contentView, this.toolbarView, savedInstanceState);
+        initListeners();
+        loadData();
+        return view;
+    }
+    
+    private void setUpContentView(View view) {
+        rootView = (ViewGroup) view.findViewById(R.id.root_content);
+        this.contentLayoutID = getContentLayoutID();
+        if (contentLayoutID > 0) {
+            try {
+                this.contentView = View.inflate(mContext, this.contentLayoutID, null);
+                if (contentView == null) {
+//                    throw new NullPointerException("contentView must not be null,please invoke getContentLayoutID() first...");
+                } else {
+                    rootView.addView(contentView, 0);
+                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
         }
-        if (contentView == null) {
-            throw new NullPointerException("contentView must not be null,please invoke setActivityView(int layoutId) first...");
-        } else {
-            rootView.addView(contentView, 0);
+    }
+    
+    private void setUpToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbarRootView = (ViewGroup) view.findViewById(R.id.root_toolbar);
+        initToolbar();
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        int toobarLayoutId = getToolbarSelfViewID();
+        if (toobarLayoutId > 0) {
+            try {
+                this.toolbarView = View.inflate(mContext, toobarLayoutId, null);
+                if (toolbarView != null) {
+                    toolbarRootView.addView(toolbarView);
+                } else {
+                    toolbarRootView.setVisibility(View.GONE);
+                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +126,6 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
                 getActivity().finish();
             }
         });
-        initViews(savedInstanceState);
-        initListeners();
-        initNoDoubleClickListener();
-        loadData();
-        return view;
     }
     
     private void initNoDoubleClickListener() {
@@ -113,31 +138,19 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     }
     
     /**
-     * 设置真实的布局内容，放super.onCreateView()前调用
+     * 返回Activity布局文件
      *
-     * @param layoutId
+     * @return
      */
-    protected void setFragmentView(int layoutId) {
-        this.contentLayoutID = layoutId;
-        this.contentView = View.inflate(mContext, layoutId, null);
-    }
+    protected abstract int getContentLayoutID();
     
     /**
-     * 设置真实的布局内容，放super.onCreateView()前调用
+     * 设置自定义的标题栏
      *
-     * @param layout
+     * @return
      */
-    protected void setFragmentView(View layout) {
-        this.contentView = layout;
-    }
-    
-    /**
-     * 设置自定义的标题栏，放super.onCreate(savedInstanceState)前调用
-     *
-     * @param layoutId
-     */
-    protected void setToolbarSelfView(int layoutId) {
-        this.toolbarView = View.inflate(mContext, layoutId, null);
+    protected int getToolbarSelfViewID() {
+        return -1;
     }
     
     /**
@@ -150,24 +163,29 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     /**
      * 初始化变量，包括Intent带的数据和Activity内的变量
      */
-    protected abstract void initVariables();
+    protected void initVariables() {
+    }
     
     /**
      * 加载layout布局文件，初始化控件
      *
+     * @param contentView
+     * @param toolbarView
      * @param savedInstanceState
      */
-    protected abstract void initViews(Bundle savedInstanceState);
+    protected abstract void initViews(View contentView, View toolbarView, Bundle savedInstanceState);
     
     /**
      * 为所有控件加上事件方法
      */
-    protected abstract void initListeners();
+    protected void initListeners() {
+    }
     
     /**
      * 向服务器请求具体数据
      */
-    protected abstract void loadData();
+    protected void loadData() {
+    }
     
     
     protected void onNoDoubleClick(View v) {
@@ -176,11 +194,9 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     /**
      * 设置网络请求框架，默认为okHttp3
      * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
-     *
-     * @param iBaseModel
      */
-    protected void setIBaseModel(IBaseModel iBaseModel) {
-        this.iBaseModel = iBaseModel;
+    protected void setIBaseModel() {
+        this.iBaseModel = ApiRequesterUtil.getInstance().getIApiRequester();
     }
     
     @Override

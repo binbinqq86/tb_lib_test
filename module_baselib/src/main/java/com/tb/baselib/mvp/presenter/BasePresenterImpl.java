@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 
 /**
  * Created by : tb on 2017/9/30 上午11:03.
- * Description :Model负责数据的处理和业务逻辑
+ * Description :负责处理业务逻辑代码，处理Model数据，然后将处理完的数据分发到View层
  */
 public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T> {
     private IBaseView iBaseView;
@@ -110,5 +110,6 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     @Override
     public void detachView() {
         iBaseView = null;
+        iBaseModel = null;
     }
 }

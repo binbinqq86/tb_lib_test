@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 /**
  * Created by : tb on 2017/9/30 上午10:34.
  * Description :mvp之presenter---Presenter负责做View和Model的中间人
+ * 负责处理业务逻辑代码，处理Model数据，然后将处理完的数据分发到View层
  */
 public interface IBasePresenter {
     /**

@@ -38,28 +38,20 @@ public class MainActivity extends BaseActivityWithViewStatus {
     ImageView iv;
     @BindView(R.id.textView)
     TextView textView;
-    private Handler mHandler = new Handler(Looper.getMainLooper());
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //使用butterknife
-        View view = View.inflate(this, R.layout.app_activity_main, null);
-        setActivityView(view);
-        ButterKnife.bind(this, view);
-        //不使用butterknife
-//        setActivityView(R.layout.app_activity_main);
-        //设置自定义toolbar
-//        setToolbarSelfView(R.layout.app_activity_main);
         super.onCreate(savedInstanceState);
-        //默认点击finish，此处可以重写事件
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ToastUtils.showCenter("ARouter test");
-                ActivityLauncher.test(MainActivity.this);
-            }
-        });
-        textView.setOnClickListener(noDoubleClickListener);
+    }
+    
+    @Override
+    protected int getContentLayoutID() {
+        return R.layout.app_activity_main;
+    }
+    
+    @Override
+    protected int getToolbarSelfViewID() {
+        return R.layout.app_self_toolbar;
     }
     
     @Override
@@ -73,18 +65,24 @@ public class MainActivity extends BaseActivityWithViewStatus {
     }
     
     @Override
-    protected void initVariables() {
-        
-    }
-    
-    @Override
-    protected void initViews(Bundle savedInstanceState) {
-    
+    protected void initViews(View contentView, View toolbarView, Bundle savedInstanceState) {
+//        textView = (TextView) contentView.findViewById(R.id.textView);
+//        iv = (ImageView) contentView.findViewById(R.id.iv);
+        //或者使用butterKnife
+        ButterKnife.bind(this, contentView);
     }
     
     @Override
     protected void initListeners() {
-        
+        //默认点击finish，此处可以重写事件
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showCenter("ARouter test");
+                ActivityLauncher.test(MainActivity.this);
+            }
+        });
+        textView.setOnClickListener(noDoubleClickListener);
     }
     
     @Override
@@ -110,7 +108,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
     protected void loadData() {
         TestParam param = new TestParam();
 //        mBasePresenter.loadData(1000, Api.URL_TEST, TestBean.class, param);
-        mBasePresenter.loadData(1001, Api.URL_TEST, TestBean.class, null,BaseConstant.GET);
+        mBasePresenter.loadData(1001, Api.URL_TEST, TestBean.class, null, BaseConstant.GET);
     }
     
     @Override
