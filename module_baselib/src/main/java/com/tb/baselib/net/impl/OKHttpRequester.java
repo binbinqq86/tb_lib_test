@@ -12,7 +12,6 @@ import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.util.LogUtils;
 
 import java.io.IOException;
-import java.lang.annotation.Retention;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
@@ -33,8 +32,8 @@ import okhttp3.Response;
 public class OKHttpRequester implements IBaseModel {
     private static final String TAG = "OKHttpRequester";
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final String CONTENT_TYPE = "application/json";
+    private static final String CONTENT_TYPE = "application/json; charset=utf-8";
+    private static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
     private static final String DEBUG_FORMAT = "RESP CODE: %1$s, RESQ CODE %2$s, JSON:%3$s, EXCEPTION:%4$s";
     /**
      * 采用线程安全的hashTable

@@ -40,8 +40,11 @@ ext {
     arouterCompileVersion = "1.1.2"
     arouterApiVersion = "1.2.1.1"
     javaCompileVersion = JavaVersion.VERSION_1_7
-    rxjavaVersion = "2.0.0"
+    rxjavaVersion = "2.1.8"
     rxAndroidVersion = "2.0.1"
+    retrofitVersion = "2.3.0"
+    converterGsonVersion = "2.3.0"
+    adapterRxJava2Version = "2.3.0"
 }
 
 task clean(type: Delete) {
