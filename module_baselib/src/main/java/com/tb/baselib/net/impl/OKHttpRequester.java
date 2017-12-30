@@ -72,46 +72,46 @@ public class OKHttpRequester implements IBaseModel {
     }
     
     @Override
-    public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
+    public void post(int requestCode, String url, final Class cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void post(final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
+    public void post(final int requestCode, String url, final Class cls, Object param, final OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.POST, requestCode, url, cls, param, callback, timeout);
     }
     
     @Override
-    public void get(int requestCode, String url, Type cls, OnRequestCallback callback) {
+    public void get(int requestCode, String url, Class cls, OnRequestCallback callback) {
         this.get(requestCode, url, cls, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void get(int requestCode, String url, Type cls, OnRequestCallback callback, long timeout) {
+    public void get(int requestCode, String url, Class cls, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.GET, requestCode, url, cls, null, callback, timeout);
     }
     
     @Override
-    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+    public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.delete(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+    public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.DELETE, requestCode, url, cls, param, callback, timeout);
     }
     
     @Override
-    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.PUT, requestCode, url, cls, param, callback, timeout);
     }
     
-    private void doRequest(final String type, final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
+    private void doRequest(final String type, final int requestCode, String url, final Class cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
             Request.Builder builder = new Request.Builder()
                     .url(BaseConstant.BASE_API_URL + url)
@@ -182,10 +182,11 @@ public class OKHttpRequester implements IBaseModel {
                                             //简易处理方式如下：
                                             Object respObj = null;
                                             //String json="{\"code\":0,\"message\":\"success\",\"data\":[{\"name\":\"tb\",\"json\":\"mock\"}]}";
+                                            Type mType=cls;
                                             if (json.replace(" ", "").contains("\"data\":{")) {
-                                                respObj = GsonUtil.getInstance().fromJson(json, cls);
+                                                respObj = GsonUtil.getInstance().fromJson(json, mType);
                                             } else if (json.replace(" ", "").contains("\"data\":[")) {
-                                                respObj = GsonUtil.getInstance().fromJsonArray(json, cls);
+                                                respObj = GsonUtil.getInstance().fromJsonArray(json, mType);
                                             }
                                             if (respObj instanceof BaseResponse) {
                                                 callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());

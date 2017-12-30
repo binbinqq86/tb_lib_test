@@ -20,7 +20,7 @@ public interface IBasePresenter {
      */
     void loadData(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final String type
             , final long timeout);
@@ -34,7 +34,7 @@ public interface IBasePresenter {
      */
     void loadData(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final String type);
     
@@ -46,7 +46,7 @@ public interface IBasePresenter {
      */
     void loadData(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param);
     
     void detachView();

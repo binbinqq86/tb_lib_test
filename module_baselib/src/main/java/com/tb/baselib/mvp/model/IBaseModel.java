@@ -23,7 +23,7 @@ public interface IBaseModel {
      */
     void post(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
     );
@@ -40,7 +40,7 @@ public interface IBaseModel {
      */
     void post(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
             , final long timeout
@@ -54,7 +54,7 @@ public interface IBaseModel {
      */
     void get(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final OnRequestCallback callback);
     
     
@@ -67,7 +67,7 @@ public interface IBaseModel {
      */
     void get(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final OnRequestCallback callback
             , final long timeout);
     
@@ -82,7 +82,7 @@ public interface IBaseModel {
      */
     void delete(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
     );
@@ -99,7 +99,7 @@ public interface IBaseModel {
      */
     void delete(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
             , final long timeout
@@ -116,7 +116,7 @@ public interface IBaseModel {
      */
     void put(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
     );
@@ -133,7 +133,7 @@ public interface IBaseModel {
      */
     void put(final int requestCode
             , final String url
-            , final Type cls
+            , final Class cls
             , final Object param
             , final OnRequestCallback callback
             , final long timeout

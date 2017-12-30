@@ -58,7 +58,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param timeout     超时时间
      */
     @Override
-    public void loadData(int requestCode, String url, Type cls, Object param, String type, long timeout) {
+    public void loadData(int requestCode, String url, Class cls, Object param, String type, long timeout) {
         iBaseView.showLoadingView();
         if (TextUtils.isEmpty(type)) {
             type = HttpConstant.POST;//默认为post
@@ -86,7 +86,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param type        请求类型(get,post,delete,put...)
      */
     @Override
-    public void loadData(int requestCode, String url, Type cls, Object param, String type) {
+    public void loadData(int requestCode, String url, Class cls, Object param, String type) {
         loadData(requestCode, url, cls, param, type, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
@@ -99,7 +99,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param param       请求参数
      */
     @Override
-    public void loadData(int requestCode, String url, Type cls, Object param) {
+    public void loadData(int requestCode, String url, Class cls, Object param) {
         iBaseView.showLoadingView();
         iBaseModel.post(requestCode, url, cls, param, this);
     }

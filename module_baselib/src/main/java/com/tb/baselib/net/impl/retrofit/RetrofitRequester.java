@@ -1,7 +1,10 @@
 package com.tb.baselib.net.impl.retrofit;
 
+import android.util.Log;
+
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.constant.BaseConstant;
+import com.tb.baselib.json.impl.GsonUtil;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.BaseResponse;
 import com.tb.baselib.net.HttpConstant;
@@ -96,22 +99,22 @@ public class RetrofitRequester implements IBaseModel {
     }
     
     @Override
-    public void post(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+    public void post(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void post(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+    public void post(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         
     }
     
     @Override
-    public void get(int requestCode, String url, Type cls, OnRequestCallback callback) {
+    public void get(int requestCode, String url, Class cls, OnRequestCallback callback) {
         this.get(requestCode, url, cls, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void get(final int requestCode, String url, final Type cls, final OnRequestCallback callback, long timeout) {
+    public void get(final int requestCode, String url, final Class cls, final OnRequestCallback callback, long timeout) {
         getRetrofitBuilder(timeout).create(RetrofitService.class).get(url, new HashMap<String, String>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -127,7 +130,17 @@ public class RetrofitRequester implements IBaseModel {
                             if (o != null) {
                                 LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", o.toString()));
                                 if (o.getData() != null && o.getCode() == 0) {//后台返回成功
-                                    callback.onSuccess(200, requestCode, o.getData());
+//                                    if(o.getData().toString().startsWith("{")){
+//
+//                                    }else if(o.getData().toString().startsWith("[")){
+//
+//                                    }
+//                                    GsonUtil.getInstance().fromJson(o.getData().toString(),cls)
+                                    ;
+//                                    Type type=cls;
+//                                    Log.e(TAG, "onNext: "+cls.getCanonicalName() );
+                                    //TODO：试试集合
+                                    callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJson(o.getData().toString(),cls));
                                 } else {
                                     callback.onFailure(o.getCode(), requestCode, o.getMessage());
                                 }
@@ -153,22 +166,22 @@ public class RetrofitRequester implements IBaseModel {
     }
     
     @Override
-    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+    public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.delete(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+    public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         
     }
     
     @Override
-    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
+    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
-    public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
+    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         
     }
     
