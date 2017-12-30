@@ -45,6 +45,7 @@ ext {
     retrofitVersion = "2.3.0"
     converterGsonVersion = "2.3.0"
     adapterRxJava2Version = "2.3.0"
+    loggingInterceptorVersion="3.9.1"
 }
 
 task clean(type: Delete) {

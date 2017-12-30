@@ -42,5 +42,6 @@ public class Api {
      * 测试api地址
      */
     public static final String URL_TEST = "api/v1/dict";
+    public static final String URL_TEST_1="api.cli/v1/client/device";
     
 }

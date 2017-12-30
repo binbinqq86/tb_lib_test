@@ -1,13 +1,10 @@
 package com.example.tb.tb_lib_test.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,12 +13,14 @@ import com.example.tb.tb_lib_test.R;
 import com.example.tb.tb_lib_test.webapi.api.Api;
 import com.example.tb.tb_lib_test.webapi.bean.TestBean;
 import com.example.tb.tb_lib_test.webapi.param.TestParam;
-import com.google.gson.Gson;
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
 import com.tb.baselib.constant.BaseConstant;
-import com.tb.baselib.image.ImageLoaderUtil;
+import com.tb.baselib.image.impl.GlideImageLoader;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.manager.PermissionMgr;
+import com.tb.baselib.mvp.model.IBaseModel;
+import com.tb.baselib.net.HttpConstant;
+import com.tb.baselib.net.impl.retrofit.RetrofitRequester;
 import com.tb.baselib.widget.ToastUtils;
 
 import butterknife.BindView;
@@ -105,10 +104,15 @@ public class MainActivity extends BaseActivityWithViewStatus {
     }
     
     @Override
+    protected IBaseModel getIBaseModel() {
+        return RetrofitRequester.getInstance();
+    }
+    
+    @Override
     protected void loadData() {
         TestParam param = new TestParam();
 //        mBasePresenter.loadData(1000, Api.URL_TEST, TestBean.class, param);
-        mBasePresenter.loadData(1001, Api.URL_TEST, TestBean.class, null, BaseConstant.GET);
+        mBasePresenter.loadData(1001, Api.URL_TEST+"?regionId=1", TestBean.class, null, HttpConstant.GET);
     }
     
     @Override
@@ -149,6 +153,6 @@ public class MainActivity extends BaseActivityWithViewStatus {
     private void imageTest() {
 //        Log.e(TAG, "imageTest: " + (iv == null));
         String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png";
-        ImageLoaderUtil.getInstance().getIImageDisplay().displayByUrl(mActivityContext, iv, url);
+        GlideImageLoader.getInstance().displayByUrl(mActivityContext, iv, url);
     }
 }

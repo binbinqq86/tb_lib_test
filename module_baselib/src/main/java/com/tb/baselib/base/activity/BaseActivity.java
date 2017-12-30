@@ -15,9 +15,7 @@ import com.tb.baselib.listener.NoDoubleClickListener;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.mvp.presenter.BasePresenterImpl;
 import com.tb.baselib.mvp.view.IBaseView;
-import com.tb.baselib.net.ApiRequesterUtil;
-
-import butterknife.ButterKnife;
+import com.tb.baselib.net.impl.OKHttpRequester;
 
 /**
  * Created by : tb on 2017/9/19 下午5:10.
@@ -60,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         super.onCreate(savedInstanceState);
         mActivityContext = this;
         mApplicationContext = getApplicationContext();
-        setIBaseModel();
+        iBaseModel=getIBaseModel();
         mBasePresenter = new BasePresenterImpl(this, iBaseModel);
         initVariables();
         initNoDoubleClickListener();
@@ -189,10 +187,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     
     /**
      * 设置网络请求框架，默认为okHttp3
-     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
+     * @return
      */
-    protected void setIBaseModel() {
-        this.iBaseModel = ApiRequesterUtil.getInstance().getIApiRequester();
+    protected IBaseModel getIBaseModel() {
+        return OKHttpRequester.getInstance();
     }
     
     @Override

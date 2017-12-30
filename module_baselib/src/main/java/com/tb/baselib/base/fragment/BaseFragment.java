@@ -17,7 +17,7 @@ import com.tb.baselib.listener.NoDoubleClickListener;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.mvp.presenter.BasePresenterImpl;
 import com.tb.baselib.mvp.view.IBaseView;
-import com.tb.baselib.net.ApiRequesterUtil;
+import com.tb.baselib.net.impl.OKHttpRequester;
 
 /**
  * Created by : tb on 2017/9/20 下午4:33.
@@ -65,7 +65,7 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setIBaseModel();
+        iBaseModel=getIBaseModel();
         mBasePresenter = new BasePresenterImpl(this, iBaseModel);
         initVariables();
         initNoDoubleClickListener();
@@ -198,10 +198,9 @@ public abstract class BaseFragment extends Fragment implements IBaseView {
     
     /**
      * 设置网络请求框架，默认为okHttp3
-     * 详见：{@link ApiRequesterUtil#setRequestStrategy(IBaseModel)}
      */
-    protected void setIBaseModel() {
-        this.iBaseModel = ApiRequesterUtil.getInstance().getIApiRequester();
+    protected IBaseModel getIBaseModel() {
+        return OKHttpRequester.getInstance();
     }
     
     @Override

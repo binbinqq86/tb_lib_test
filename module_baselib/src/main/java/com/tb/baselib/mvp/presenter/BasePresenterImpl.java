@@ -3,9 +3,9 @@ package com.tb.baselib.mvp.presenter;
 import android.text.TextUtils;
 import android.view.TextureView;
 
-import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.mvp.view.IBaseView;
 import com.tb.baselib.mvp.model.IBaseModel;
+import com.tb.baselib.net.HttpConstant;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 
 import java.lang.reflect.Type;
@@ -61,15 +61,15 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     public void loadData(int requestCode, String url, Type cls, Object param, String type, long timeout) {
         iBaseView.showLoadingView();
         if (TextUtils.isEmpty(type)) {
-            type = BaseConstant.POST;//默认为post
+            type = HttpConstant.POST;//默认为post
         }
-        if (type.equalsIgnoreCase(BaseConstant.GET)) {
+        if (type.equalsIgnoreCase(HttpConstant.GET)) {
             iBaseModel.get(requestCode, url, cls, this, timeout);
-        } else if (type.equalsIgnoreCase(BaseConstant.POST)) {
+        } else if (type.equalsIgnoreCase(HttpConstant.POST)) {
             iBaseModel.post(requestCode, url, cls, param, this, timeout);
-        } else if (type.equalsIgnoreCase(BaseConstant.DELETE)) {
+        } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
         
-        } else if (type.equalsIgnoreCase(BaseConstant.PUT)) {
+        } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
         
         } else {
         
@@ -87,7 +87,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      */
     @Override
     public void loadData(int requestCode, String url, Type cls, Object param, String type) {
-        loadData(requestCode, url, cls, param, type, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+        loadData(requestCode, url, cls, param, type, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     /**

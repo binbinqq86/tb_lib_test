@@ -79,5 +79,6 @@ dependencies {
     api "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
     api "com.squareup.retrofit2:converter-gson:$rootProject.ext.converterGsonVersion"
     api "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.adapterRxJava2Version"
+    api "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.loggingInterceptorVersion"
 
 }

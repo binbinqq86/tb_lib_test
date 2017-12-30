@@ -5,9 +5,10 @@ import android.os.Looper;
 
 import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
-import com.tb.baselib.json.JsonUtil;
+import com.tb.baselib.json.impl.GsonUtil;
 import com.tb.baselib.net.BaseResponse;
 import com.tb.baselib.mvp.model.IBaseModel;
+import com.tb.baselib.net.HttpConstant;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 import com.tb.baselib.util.LogUtils;
 
@@ -32,9 +33,6 @@ import okhttp3.Response;
 public class OKHttpRequester implements IBaseModel {
     private static final String TAG = "OKHttpRequester";
     private static final Handler mHandler = new Handler(Looper.getMainLooper());
-    private static final String CONTENT_TYPE = "application/json; charset=utf-8";
-    private static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
-    private static final String DEBUG_FORMAT = "RESP CODE: %1$s, RESQ CODE %2$s, JSON:%3$s, EXCEPTION:%4$s";
     /**
      * 采用线程安全的hashTable
      * K: 超时时间
@@ -75,58 +73,58 @@ public class OKHttpRequester implements IBaseModel {
     
     @Override
     public void post(int requestCode, String url, final Type cls, Object param, OnRequestCallback callback) {
-        this.post(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+        this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
     public void post(final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
-        doRequest(BaseConstant.POST, requestCode, url, cls, param, callback, timeout);
+        doRequest(HttpConstant.POST, requestCode, url, cls, param, callback, timeout);
     }
     
     @Override
     public void get(int requestCode, String url, Type cls, OnRequestCallback callback) {
-        this.get(requestCode, url, cls, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+        this.get(requestCode, url, cls, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
     public void get(int requestCode, String url, Type cls, OnRequestCallback callback, long timeout) {
-        doRequest(BaseConstant.GET, requestCode, url, cls, null, callback, timeout);
+        doRequest(HttpConstant.GET, requestCode, url, cls, null, callback, timeout);
     }
     
     @Override
     public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
-        this.delete(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+        this.delete(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
     public void delete(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
-        doRequest(BaseConstant.DELETE, requestCode, url, cls, param, callback, timeout);
+        doRequest(HttpConstant.DELETE, requestCode, url, cls, param, callback, timeout);
     }
     
     @Override
     public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback) {
-        this.put(requestCode, url, cls, param, callback, BaseConstant.HTTP_DEFAULT_TIME_OUT);
+        this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
     
     @Override
     public void put(int requestCode, String url, Type cls, Object param, OnRequestCallback callback, long timeout) {
-        doRequest(BaseConstant.PUT, requestCode, url, cls, param, callback, timeout);
+        doRequest(HttpConstant.PUT, requestCode, url, cls, param, callback, timeout);
     }
     
     private void doRequest(final String type, final int requestCode, String url, final Type cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
             Request.Builder builder = new Request.Builder()
                     .url(BaseConstant.BASE_API_URL + url)
-                    .addHeader("content-type", CONTENT_TYPE);
+                    .addHeader("content-type", HttpConstant.CONTENT_TYPE);
             if (param != null) {
-                String jsonParam = JsonUtil.getInstance().getJsonUtil().toJson(param);
-                RequestBody requestBody = RequestBody.create(JSON, jsonParam);
+                String jsonParam = GsonUtil.getInstance().toJson(param);
+                RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
                 LogUtils.json(jsonParam);
-                if (type.equalsIgnoreCase(BaseConstant.POST)) {
+                if (type.equalsIgnoreCase(HttpConstant.POST)) {
                     builder.post(requestBody);
-                } else if (type.equalsIgnoreCase(BaseConstant.PUT)) {
+                } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
                     builder.put(requestBody);
-                } else if (type.equalsIgnoreCase(BaseConstant.DELETE)) {
+                } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
                     builder.delete(requestBody);
                 }
             }
@@ -137,7 +135,7 @@ public class OKHttpRequester implements IBaseModel {
                 public void onFailure(final Call call, final IOException e) {
                     try {
                         if (call.request().body() != null) {
-                            LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), String.valueOf(call.request().body().toString()), ""));
+                            LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), String.valueOf(call.request().body().toString()), ""));
                         }
                         mHandler.post(new Runnable() {
                             @Override
@@ -146,13 +144,13 @@ public class OKHttpRequester implements IBaseModel {
                                     try {
                                         callback.onFailure(ExceptionCode.NO_INTERNET, requestCode, "数据请求失败");
                                     } catch (Exception e) {
-                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                        LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
                                 }
                             }
                         });
                     } catch (final Exception e1) {
-                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("-1"), String.valueOf(requestCode), String.valueOf(e1.getMessage()), ""));
+                        LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("-1"), String.valueOf(requestCode), String.valueOf(e1.getMessage()), ""));
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -160,7 +158,7 @@ public class OKHttpRequester implements IBaseModel {
                                     try {
                                         callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据请求失败");
                                     } catch (Exception e) {
-                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                        LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
                                 }
                             }
@@ -185,9 +183,9 @@ public class OKHttpRequester implements IBaseModel {
                                             Object respObj = null;
                                             //String json="{\"code\":0,\"message\":\"success\",\"data\":[{\"name\":\"tb\",\"json\":\"mock\"}]}";
                                             if (json.replace(" ", "").contains("\"data\":{")) {
-                                                respObj = JsonUtil.getInstance().getJsonUtil().fromJson(json, cls);
+                                                respObj = GsonUtil.getInstance().fromJson(json, cls);
                                             } else if (json.replace(" ", "").contains("\"data\":[")) {
-                                                respObj = JsonUtil.getInstance().getJsonUtil().fromJsonArray(json, cls);
+                                                respObj = GsonUtil.getInstance().fromJsonArray(json, cls);
                                             }
                                             if (respObj instanceof BaseResponse) {
                                                 callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());
@@ -200,13 +198,13 @@ public class OKHttpRequester implements IBaseModel {
                                             callback.onFailure(response.code(), requestCode, "网络错误");
                                         }
                                     } catch (Exception e) {
-                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                        LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
                                 }
                             }
                         });
                     } catch (final Exception e2) {
-                        LogUtils.d("Response Exception -> " + String.format(DEBUG_FORMAT, String.valueOf(response.code()), String.valueOf(requestCode), "null", String.valueOf(e2.getMessage())));
+                        LogUtils.d("Response Exception -> " + String.format(HttpConstant.DEBUG_FORMAT, String.valueOf(response.code()), String.valueOf(requestCode), "null", String.valueOf(e2.getMessage())));
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -214,7 +212,7 @@ public class OKHttpRequester implements IBaseModel {
                                     try {
                                         callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, "数据解析异常");
                                     } catch (Exception e) {
-                                        LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                                        LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                                     }
                                 }
                             }
@@ -223,7 +221,7 @@ public class OKHttpRequester implements IBaseModel {
                 }
             });
         } catch (final Exception e3) {
-            LogUtils.d(String.format(DEBUG_FORMAT, "", String.valueOf(requestCode), String.valueOf(e3.getMessage()), ""));
+            LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, "", String.valueOf(requestCode), String.valueOf(e3.getMessage()), ""));
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -231,7 +229,7 @@ public class OKHttpRequester implements IBaseModel {
                         try {
                             callback.onFailure(ExceptionCode.THROW_EXCEPTION, requestCode, e3.getMessage());
                         } catch (Exception e) {
-                            LogUtils.d(String.format(DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
+                            LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
                         }
                     }
                 }
