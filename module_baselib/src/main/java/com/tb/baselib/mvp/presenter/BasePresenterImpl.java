@@ -1,7 +1,6 @@
 package com.tb.baselib.mvp.presenter;
 
 import android.text.TextUtils;
-import android.view.TextureView;
 
 import com.tb.baselib.mvp.view.IBaseView;
 import com.tb.baselib.mvp.model.IBaseModel;

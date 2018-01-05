@@ -3,6 +3,7 @@ package com.tb.baselib.net.impl.retrofit;
 import android.util.Log;
 
 import com.tb.baselib.BuildConfig;
+import com.tb.baselib.base.BaseBean;
 import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.json.impl.GsonUtil;
 import com.tb.baselib.mvp.model.IBaseModel;
@@ -121,14 +122,14 @@ public class RetrofitRequester implements IBaseModel {
                 .subscribe(new Observer<BaseResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        
+                    
                     }
                     
                     @Override
                     public void onNext(BaseResponse o) {
                         if (callback != null) {
                             if (o != null) {
-                                LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", o.toString()));
+                                LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), o.toString(), ""));
                                 if (o.getData() != null && o.getCode() == 0) {//后台返回成功
 //                                    if(o.getData().toString().startsWith("{")){
 //
@@ -139,8 +140,9 @@ public class RetrofitRequester implements IBaseModel {
                                     ;
 //                                    Type type=cls;
 //                                    Log.e(TAG, "onNext: "+cls.getCanonicalName() );
-                                    //TODO：试试集合
-                                    callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJson(o.getData().toString(),cls));
+                                    //TODO：试试集合 Rxjava泛型问题处理===========不依靠GsonUtil
+                                    callback.onSuccess(200,requestCode, o.getData());
+//                                    callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJson(o.getData().toString(), cls));
                                 } else {
                                     callback.onFailure(o.getCode(), requestCode, o.getMessage());
                                 }

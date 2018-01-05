@@ -27,7 +27,7 @@ import retrofit2.http.Url;
 /**
  * @auther tb
  * @time 2017/12/29 下午4:35
- * @desc Retrofit的专用接口(map不能为null),get，delete参数统一放url
+ * @desc Retrofit的专用接口(map不能为null),get,delete参数统一放完整带拼接参数的url
  */
 public interface RetrofitService {
     @POST()

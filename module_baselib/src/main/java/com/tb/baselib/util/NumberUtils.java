@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.FieldPosition;
 
 /**
  * Created by : tb on 2017/7/20 上午9:19.
@@ -109,36 +108,42 @@ public class NumberUtils {
     }
     
     /**
-     * 大数据处理
+     * 大数据处理，按照指定的格式来展示数字
      *
-     * @param money 需要处理的钱，可以是字符串或者浮点，整型
-     * @param isFen 默认单位为分还是元——true代表分，false代表元
-     * @param num   保留的小数位数(目前只支持一位或两位小数)
+     * @param obj      需要处理的数据，可以是字符串或者浮点，整型
+     * @param divider  除数(0,10,100,1000,10000...)
+     * @param num      保留的小数位数(目前只支持0位,1位,2位,3位,4位小数)
+     * @param round    四舍五入还是舍弃类似的参考值 {@link BigDecimal#ROUND_DOWN,BigDecimal#ROUND_UP ...}
+     * @param isFormat 数字是否三位一个逗号隔开(千分位)
      * @return
      */
-    public static String formatMoney(Object money, boolean isFen, int num) {
-        String pattern = "###,##0";
+    public static String formatNumber(Object obj, int divider, int num, int round, boolean isFormat) {
+        String pattern = isFormat ? "###,##0" : "##0";
         if (num == 1) {
             pattern += ".0";
         } else if (num == 2) {
             pattern += ".00";
+        } else if (num == 3) {
+            pattern += ".000";
+        } else if (num == 4) {
+            pattern += ".0000";
         }
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
-        String value = "0.00";
-        if (money == null) {
+        String value = decimalFormat.format(0);
+        if (obj == null) {
             return value;
         }
-        String mMoney = String.valueOf(money);
+        String mMoney = String.valueOf(obj);
         if (!TextUtils.isEmpty(mMoney)) {
             if (stringToDouble(mMoney) == 0) {
                 return value;
             }
             BigDecimal bigDecimal = new BigDecimal(mMoney);
             try {
-                if (isFen) {
-                    return decimalFormat.format(bigDecimal.divide(new BigDecimal(100), num, BigDecimal.ROUND_DOWN)).toString();
-                } else {
-                    return decimalFormat.format(bigDecimal.setScale(num, BigDecimal.ROUND_DOWN)).toString();
+                if (divider > 0) {
+                    return decimalFormat.format(bigDecimal.divide(new BigDecimal(divider), num, round)).toString();
+                } else {//小于等于0返回原数据
+                    return decimalFormat.format(bigDecimal.setScale(num, round)).toString();
                 }
             } catch (ArithmeticException e) {
                 return value;
@@ -149,4 +154,11 @@ public class NumberUtils {
         return value;
     }
     
+    public static String formatNumberRoundDown(Object obj, int divider, int num, boolean isFormat) {
+        return formatNumber(obj, divider, num, BigDecimal.ROUND_DOWN, isFormat);
+    }
+    
+    public static String formatNumberRoundUp(Object obj, int divider, int num, boolean isFormat) {
+        return formatNumber(obj, divider, num, BigDecimal.ROUND_UP, isFormat);
+    }
 }
