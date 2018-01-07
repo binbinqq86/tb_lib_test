@@ -2,6 +2,7 @@ package com.tb.baselib.mvp.presenter;
 
 import android.text.TextUtils;
 
+import com.tb.baselib.interfaces.OnDownloadFile;
 import com.tb.baselib.mvp.view.IBaseView;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.HttpConstant;
@@ -98,6 +99,10 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      */
     public void loadData(int requestCode, String url, Class cls, Object param) {
         loadData(requestCode, url, cls, param, HttpConstant.POST, HttpConstant.HTTP_DEFAULT_TIME_OUT);
+    }
+
+    public void downLoadFile(String url, OnDownloadFile onDownloadFile) {
+        iBaseModel.downLoadFile(url, onDownloadFile);
     }
 
     /**

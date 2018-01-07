@@ -1,5 +1,6 @@
 package com.tb.baselib.mvp.model;
 
+import com.tb.baselib.interfaces.OnDownloadFile;
 import com.tb.baselib.net.BaseResponse;
 import com.tb.baselib.net.interfaces.OnRequestCallback;
 
@@ -146,7 +147,8 @@ public interface IBaseModel {
     /**
      * 下载文件(一般为get)
      *
-     * @param url 请求地址
+     * @param url            请求地址
+     * @param onDownloadFile 文件下载回调监听
      */
-    void downLoadFile(String url);
+    void downLoadFile(String url, OnDownloadFile onDownloadFile);
 }

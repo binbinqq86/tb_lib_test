@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
+import com.tb.baselib.interfaces.OnDownloadFile;
 import com.tb.baselib.json.impl.GsonUtil;
 import com.tb.baselib.net.BaseResponse;
 import com.tb.baselib.mvp.model.IBaseModel;
@@ -264,7 +265,7 @@ public class OKHttpRequester implements IBaseModel {
     }
 
     @Override
-    public void downLoadFile(String url) {
+    public void downLoadFile(String url, OnDownloadFile onDownloadFile) {
 
     }
 }

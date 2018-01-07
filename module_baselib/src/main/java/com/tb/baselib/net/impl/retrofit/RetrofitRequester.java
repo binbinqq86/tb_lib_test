@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.base.BaseBean;
 import com.tb.baselib.constant.BaseConstant;
+import com.tb.baselib.interfaces.OnDownloadFile;
 import com.tb.baselib.json.impl.GsonUtil;
 import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.BaseResponse;
@@ -190,7 +191,7 @@ public class RetrofitRequester implements IBaseModel {
     }
 
     @Override
-    public void downLoadFile(String url) {
+    public void downLoadFile(String url, OnDownloadFile onDownloadFile) {
 
     }
 }
