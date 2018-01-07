@@ -99,8 +99,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      */
     @Override
     public void loadData(int requestCode, String url, Class cls, Object param) {
-        iBaseView.showLoadingView();
-        iBaseModel.post(requestCode, url, cls, param, this);
+        loadData(requestCode, url, cls, param, HttpConstant.POST, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
 
     /**
