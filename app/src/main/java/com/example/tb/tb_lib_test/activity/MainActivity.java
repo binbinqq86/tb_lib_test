@@ -10,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tb.tb_lib_test.R;
-import com.example.tb.tb_lib_test.webapi.api.Api;
+import com.example.tb.tb_lib_test.webapi.api.Apis;
+import com.example.tb.tb_lib_test.webapi.api.ServerUrls;
 import com.example.tb.tb_lib_test.webapi.bean.TestBean;
 import com.example.tb.tb_lib_test.webapi.param.TestParam;
 import com.tb.baselib.base.activity.BaseActivityWithViewStatus;
@@ -18,13 +19,8 @@ import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.image.impl.GlideImageLoader;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.manager.PermissionMgr;
-import com.tb.baselib.mvp.model.IBaseModel;
 import com.tb.baselib.net.HttpConstant;
-import com.tb.baselib.net.impl.retrofit.RetrofitRequester;
 import com.tb.baselib.widget.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,9 +110,8 @@ public class MainActivity extends BaseActivityWithViewStatus {
 
     @Override
     protected void loadData() {
-        TestParam param = new TestParam();
-//        mBasePresenter.loadData(1000, Api.URL_TEST, TestBean.class, param);
-        mBasePresenter.loadData(1001, Api.URL_TEST + "?regionId=1", TestBean.class, null, HttpConstant.GET);
+        Apis.test(mBasePresenter);
+//        Apis.test1(mBasePresenter);
     }
 
     @Override

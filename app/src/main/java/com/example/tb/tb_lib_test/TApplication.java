@@ -1,6 +1,6 @@
 package com.example.tb.tb_lib_test;
 
-import com.example.tb.tb_lib_test.webapi.api.Api;
+import com.example.tb.tb_lib_test.webapi.api.ServerUrls;
 import com.tb.baselib.base.BaseApplication;
 
 /**
@@ -18,6 +18,6 @@ public class TApplication extends BaseApplication{
         /**
          * 初始化服务器API前缀
          */
-        Api.getInstance();
+        ServerUrls.getInstance();
     }
 }

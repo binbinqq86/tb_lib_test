@@ -15,7 +15,7 @@ public interface IBasePresenter {
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
      * @param param       请求参数
-     * @param type        请求类型(get,post,delete,put...)
+     * @param type        请求类型(get,post,delete,put...{@link com.tb.baselib.net.HttpConstant})
      * @param timeout     超时时间
      */
     void loadData(final int requestCode
@@ -24,30 +24,6 @@ public interface IBasePresenter {
             , final Object param
             , final String type
             , final long timeout);
-    
-    /**
-     * @param requestCode 请求code
-     * @param url         请求地址
-     * @param cls         服务器返回真实数据类型
-     * @param param       请求参数
-     * @param type        请求类型(get,post,delete,put...)
-     */
-    void loadData(final int requestCode
-            , final String url
-            , final Class cls
-            , final Object param
-            , final String type);
-    
-    /**
-     * @param requestCode 请求code
-     * @param url         请求地址
-     * @param cls         服务器返回真实数据类型
-     * @param param       请求参数
-     */
-    void loadData(final int requestCode
-            , final String url
-            , final Class cls
-            , final Object param);
     
     void detachView();
 }

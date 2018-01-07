@@ -2,6 +2,7 @@ package com.tb.baselib.net.impl;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.constant.BaseConstant;
@@ -80,12 +81,12 @@ public class OKHttpRequester implements IBaseModel {
     }
 
     @Override
-    public void post(int requestCode, String url, final Class cls, Object param, OnRequestCallback callback) {
+    public void post(int requestCode, String url, final Class cls, @NonNull Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
 
     @Override
-    public void post(final int requestCode, String url, final Class cls, Object param, final OnRequestCallback callback, long timeout) {
+    public void post(final int requestCode, String url, final Class cls, @NonNull Object param, final OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.POST, requestCode, url, cls, param, callback, timeout);
     }
 
@@ -110,12 +111,12 @@ public class OKHttpRequester implements IBaseModel {
     }
 
     @Override
-    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
+    public void put(int requestCode, String url, Class cls, @NonNull Object param, OnRequestCallback callback) {
         this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
 
     @Override
-    public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
+    public void put(int requestCode, String url, Class cls, @NonNull Object param, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.PUT, requestCode, url, cls, param, callback, timeout);
     }
 
@@ -127,26 +128,28 @@ public class OKHttpRequester implements IBaseModel {
                     .addHeader("content-type", HttpConstant.CONTENT_TYPE);
 
             if (type.equalsIgnoreCase(HttpConstant.POST)) {
-                if (param != null) {
-                    String jsonParam = GsonUtil.getInstance().toJson(param);
-                    RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
-                    LogUtils.json(jsonParam);
-                    builder.post(requestBody);
+                if (param == null) {
+                    param = new Object();
                 }
+                String jsonParam = GsonUtil.getInstance().toJson(param);
+                RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
+                LogUtils.json(jsonParam);
+                builder.post(requestBody);
             } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
                 if (param != null) {
-                    String jsonParam = GsonUtil.getInstance().toJson(param);
-                    RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
-                    LogUtils.json(jsonParam);
-                    builder.put(requestBody);
+                    param = new Object();
                 }
+                String jsonParam = GsonUtil.getInstance().toJson(param);
+                RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
+                LogUtils.json(jsonParam);
+                builder.put(requestBody);
             } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
                 if (param != null) {
                     String jsonParam = GsonUtil.getInstance().toJson(param);
                     RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
                     LogUtils.json(jsonParam);
                     builder.delete(requestBody);
-                }else{
+                } else {
                     builder.delete();
                 }
             }

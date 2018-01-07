@@ -53,7 +53,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
      * @param param       请求参数
-     * @param type        请求类型(get,post,delete,put...)
+     * @param type        请求类型(get,post,delete,put...{@link com.tb.baselib.net.HttpConstant})
      * @param timeout     超时时间
      */
     @Override
@@ -82,9 +82,8 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
      * @param param       请求参数
-     * @param type        请求类型(get,post,delete,put...)
+     * @param type        请求类型(get,post,delete,put...{@link com.tb.baselib.net.HttpConstant})
      */
-    @Override
     public void loadData(int requestCode, String url, Class cls, Object param, String type) {
         loadData(requestCode, url, cls, param, type, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
@@ -97,7 +96,6 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
      * @param cls         服务器返回真实数据类型
      * @param param       请求参数
      */
-    @Override
     public void loadData(int requestCode, String url, Class cls, Object param) {
         loadData(requestCode, url, cls, param, HttpConstant.POST, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
