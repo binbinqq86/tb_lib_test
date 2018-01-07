@@ -17,37 +17,42 @@ import java.util.List;
 public class GsonUtil implements IJson {
     private GsonUtil() {
     }
-    
+
     public static final GsonUtil getInstance() {
         return GsonSingletonHolder.instance;
     }
-    
+
     private static final class GsonSingletonHolder {
         private static final GsonUtil instance = new GsonUtil();
     }
-    
+
     private Gson mGson = new Gson();
-    
+
     @Override
     public String toJson(Object obj) {
         return mGson.toJson(obj);
     }
-    
+
     @Override
-    public Object fromJson(String json, Class<?> cls) {
+    public Object fromJsonObject(String json, Class<?> cls) {
         return mGson.fromJson(json, cls);
     }
-    
+
     @Override
     public Object fromJson(String json, Type type) {
         return mGson.fromJson(json, getType(BaseResponse.class, type));
     }
-    
+
+    @Override
+    public Object fromJsonList(String json, Type type) {
+        return mGson.fromJson(json, getType(List.class, type));
+    }
+
     @Override
     public Object fromJsonArray(String json, Type type) {
         return mGson.fromJson(json, getType(BaseResponse.class, getType(List.class, type)));
     }
-    
+
     /**
      * 用于处理泛型数据
      *
@@ -60,11 +65,11 @@ public class GsonUtil implements IJson {
             public Type getRawType() {
                 return raw;
             }
-            
+
             public Type[] getActualTypeArguments() {
                 return args;
             }
-            
+
             public Type getOwnerType() {
                 return null;
             }

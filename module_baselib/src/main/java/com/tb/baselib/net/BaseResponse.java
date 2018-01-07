@@ -43,11 +43,11 @@ public class BaseResponse<T> extends BaseBean{
     public void setData(T data) {
         this.data = data;
     }
-    
+
     @Override
     public String toString() {
         return "BaseResponse{" +
-                "code=" + code +
+                "code" + code +
                 ", message='" + message + '\'' +
                 ", data=" + data +
                 '}';

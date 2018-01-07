@@ -23,6 +23,9 @@ import com.tb.baselib.net.HttpConstant;
 import com.tb.baselib.net.impl.retrofit.RetrofitRequester;
 import com.tb.baselib.widget.ToastUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,22 +40,22 @@ public class MainActivity extends BaseActivityWithViewStatus {
     ImageView iv;
     @BindView(R.id.textView)
     TextView textView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    
+
     @Override
     protected int getContentLayoutID() {
         return R.layout.app_activity_main;
     }
-    
+
     @Override
     protected int getToolbarSelfViewID() {
         return R.layout.app_self_toolbar;
     }
-    
+
     @Override
     protected void initToolbar() {
         super.initToolbar();
@@ -62,7 +65,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         toolbar.setLogo(R.mipmap.ic_launcher_round);
     }
-    
+
     @Override
     protected void initViews(View contentView, View toolbarView, Bundle savedInstanceState) {
 //        textView = (TextView) contentView.findViewById(R.id.textView);
@@ -70,7 +73,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
         //或者使用butterKnife
         ButterKnife.bind(this, contentView);
     }
-    
+
     @Override
     protected void initListeners() {
         //默认点击finish，此处可以重写事件
@@ -83,7 +86,7 @@ public class MainActivity extends BaseActivityWithViewStatus {
         });
         textView.setOnClickListener(noDoubleClickListener);
     }
-    
+
     @Override
     protected void onNoDoubleClick(View v) {
         super.onNoDoubleClick(v);
@@ -102,24 +105,25 @@ public class MainActivity extends BaseActivityWithViewStatus {
                 break;
         }
     }
-    
-    @Override
-    protected IBaseModel getIBaseModel() {
-        return RetrofitRequester.getInstance();
-    }
-    
+
+//    @Override
+//    protected IBaseModel getIBaseModel() {
+//        //采用retrofit封装请求，默认直接使用okhttp
+//        return RetrofitRequester.getInstance();
+//    }
+
     @Override
     protected void loadData() {
         TestParam param = new TestParam();
 //        mBasePresenter.loadData(1000, Api.URL_TEST, TestBean.class, param);
-        mBasePresenter.loadData(1001, Api.URL_TEST+"?regionId=1", TestBean.class, null, HttpConstant.GET);
+        mBasePresenter.loadData(1001, Api.URL_TEST + "?regionId=1", TestBean.class, null, HttpConstant.GET);
     }
-    
+
     @Override
     public void showLoadingView() {
         showLoadingView("loading");
     }
-    
+
     @Override
     public void onSuccess(int responseCode, int requestCode, Object response) {
         //此处也可以显示其他页面，比如空页面等。。。
@@ -133,12 +137,13 @@ public class MainActivity extends BaseActivityWithViewStatus {
 
 //        ArrayList<TestBean> bean= (ArrayList<TestBean>) response;
 //        textView.setText(bean.get(0).getName()+"\n"+bean.get(0).getJson());
-        
-        TestBean bean = (TestBean) response;
-        textView.setText(bean.getName() + "\n" + bean.getJson());
+        if (response instanceof TestBean) {
+            TestBean bean = (TestBean) response;
+            textView.setText(bean.getName() + "\n" + bean.getJson());
+        }
         imageTest();
     }
-    
+
     @Override
     public void onFailure(int responseCode, int requestCode, String errMsg) {
         showLoadErrorView(R.mipmap.ic_launcher, errMsg, "retry", 0, new View.OnClickListener() {
@@ -149,10 +154,10 @@ public class MainActivity extends BaseActivityWithViewStatus {
             }
         });
     }
-    
+
     private void imageTest() {
 //        Log.e(TAG, "imageTest: " + (iv == null));
         String url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png";
-        GlideImageLoader.getInstance().displayByUrl(mActivityContext, iv, url);
+        GlideImageLoader.getInstance().displayWith(mActivityContext, iv, url);
     }
 }

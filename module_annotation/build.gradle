@@ -7,3 +7,7 @@ dependencies {
     targetCompatibility = rootProject.ext.javaCompileVersion
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+

@@ -11,9 +11,9 @@ public interface IImageDisplay {
     /**
      * 加载网络图片
      *
-     * @param mContext
-     * @param imageView
-     * @param url
+     * @param mContext 不要传递Application
+     * @param imageView 要显示图片的控件
+     * @param param 可以为url,file,uri,resourceId,byte[]...
      */
-    void displayByUrl(Context mContext, ImageView imageView, String url);
+    void displayWith(Context mContext, ImageView imageView, Object param);
 }

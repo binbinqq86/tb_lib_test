@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  * mvp之model---负责数据的处理
  */
 public interface IBaseModel {
-    
+
     /**
      * post请求
      *
@@ -27,7 +27,7 @@ public interface IBaseModel {
             , final Object param
             , final OnRequestCallback callback
     );
-    
+
     /**
      * post请求
      *
@@ -45,8 +45,10 @@ public interface IBaseModel {
             , final OnRequestCallback callback
             , final long timeout
     );
-    
+
     /**
+     * get请求
+     *
      * @param requestCode 请求code
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
@@ -56,9 +58,11 @@ public interface IBaseModel {
             , final String url
             , final Class cls
             , final OnRequestCallback callback);
-    
-    
+
+
     /**
+     * get请求
+     *
      * @param requestCode 请求code
      * @param url         请求地址
      * @param cls         服务器返回真实数据类型
@@ -70,9 +74,9 @@ public interface IBaseModel {
             , final Class cls
             , final OnRequestCallback callback
             , final long timeout);
-    
+
     /**
-     * post请求
+     * delete请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -86,9 +90,9 @@ public interface IBaseModel {
             , final Object param
             , final OnRequestCallback callback
     );
-    
+
     /**
-     * post请求
+     * delete请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -104,9 +108,9 @@ public interface IBaseModel {
             , final OnRequestCallback callback
             , final long timeout
     );
-    
+
     /**
-     * post请求
+     * put请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -120,9 +124,9 @@ public interface IBaseModel {
             , final Object param
             , final OnRequestCallback callback
     );
-    
+
     /**
-     * post请求
+     * put请求
      *
      * @param requestCode 请求code
      * @param url         请求地址
@@ -138,4 +142,11 @@ public interface IBaseModel {
             , final OnRequestCallback callback
             , final long timeout
     );
+
+    /**
+     * 下载文件(一般为get)
+     *
+     * @param url 请求地址
+     */
+    void downLoadFile(String url);
 }

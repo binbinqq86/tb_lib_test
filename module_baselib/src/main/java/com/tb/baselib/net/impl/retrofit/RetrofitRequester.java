@@ -2,6 +2,7 @@ package com.tb.baselib.net.impl.retrofit;
 
 import android.util.Log;
 
+import com.google.gson.reflect.TypeToken;
 import com.tb.baselib.BuildConfig;
 import com.tb.baselib.base.BaseBean;
 import com.tb.baselib.constant.BaseConstant;
@@ -14,6 +15,7 @@ import com.tb.baselib.util.LogUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -46,18 +48,18 @@ public class RetrofitRequester implements IBaseModel {
      * V: 对应的OkHttpClient实例
      */
     private Map<Long, Retrofit> mInstanceMap = new Hashtable<>();
-    
+
     private RetrofitRequester() {
     }
-    
+
     private static final class SingletonRetrofit {
         private static final RetrofitRequester instance = new RetrofitRequester();
     }
-    
+
     public static RetrofitRequester getInstance() {
         return SingletonRetrofit.instance;
     }
-    
+
     private Retrofit getRetrofitBuilder(long timeout) {
         if (mInstanceMap.containsKey(new Long(timeout))) {
             return mInstanceMap.get(new Long(timeout));
@@ -98,22 +100,22 @@ public class RetrofitRequester implements IBaseModel {
             return retrofit;
         }
     }
-    
+
     @Override
     public void post(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void post(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
-        
+
     }
-    
+
     @Override
     public void get(int requestCode, String url, Class cls, OnRequestCallback callback) {
         this.get(requestCode, url, cls, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void get(final int requestCode, String url, final Class cls, final OnRequestCallback callback, long timeout) {
         getRetrofitBuilder(timeout).create(RetrofitService.class).get(url, new HashMap<String, String>())
@@ -122,27 +124,27 @@ public class RetrofitRequester implements IBaseModel {
                 .subscribe(new Observer<BaseResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                    
+
                     }
-                    
+
                     @Override
                     public void onNext(BaseResponse o) {
                         if (callback != null) {
                             if (o != null) {
-                                LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), o.toString(), ""));
-                                if (o.getData() != null && o.getCode() == 0) {//后台返回成功
-//                                    if(o.getData().toString().startsWith("{")){
-//
-//                                    }else if(o.getData().toString().startsWith("[")){
-//
-//                                    }
-//                                    GsonUtil.getInstance().fromJson(o.getData().toString(),cls)
-                                    ;
-//                                    Type type=cls;
-//                                    Log.e(TAG, "onNext: "+cls.getCanonicalName() );
-                                    //TODO：试试集合 Rxjava泛型问题处理===========不依靠GsonUtil
-                                    callback.onSuccess(200,requestCode, o.getData());
-//                                    callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJson(o.getData().toString(), cls));
+                                LogUtils.json(GsonUtil.getInstance().toJson(o));
+                                if (o.getCode() == 0) {//后台返回成功
+//                                    String json="[{\"name\":\"tb0\",\"json\":\"mock0\"},{\"name\":\"tb1\",\"json\":\"mock1\"}]";
+//                                    o.setData(json);
+                                    if (o.getData() == null) {
+                                        o.setData(new Object());
+                                    }
+                                    if (o.getData().toString().startsWith("[{")) {
+                                        callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJsonList(o.getData().toString(), cls));
+                                    } else if (o.getData().toString().startsWith("{")) {
+                                        callback.onSuccess(200, requestCode, GsonUtil.getInstance().fromJsonObject(o.getData().toString(), cls));
+                                    } else {
+                                        callback.onSuccess(200, requestCode, o.getData());
+                                    }
                                 } else {
                                     callback.onFailure(o.getCode(), requestCode, o.getMessage());
                                 }
@@ -151,7 +153,7 @@ public class RetrofitRequester implements IBaseModel {
                             }
                         }
                     }
-                    
+
                     @Override
                     public void onError(Throwable e) {
                         LogUtils.d(String.format(HttpConstant.DEBUG_FORMAT, String.valueOf("0"), String.valueOf(requestCode), "", e.getMessage()));
@@ -159,32 +161,36 @@ public class RetrofitRequester implements IBaseModel {
                             callback.onFailure(0, requestCode, e.getMessage());
                         }
                     }
-                    
+
                     @Override
                     public void onComplete() {
-                        
+
                     }
                 });
     }
-    
+
     @Override
     public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.delete(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
-        
+
     }
-    
+
     @Override
     public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
-        
+
     }
-    
+
+    @Override
+    public void downLoadFile(String url) {
+
+    }
 }

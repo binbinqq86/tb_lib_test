@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
  */
 public interface IJson {
     String toJson(Object obj);
-    
+
     /**
      * 解析服务器返回的json
      *
@@ -18,8 +18,8 @@ public interface IJson {
      * @param cls  解析的数据模型，如果里面包含泛型，则可以使用{@link TypeToken}
      * @return
      */
-    Object fromJson(String json, Class<?> cls);
-    
+    Object fromJsonObject(String json, Class<?> cls);
+
     /**
      * 解析服务器返回的json
      * data 为 object 的情况{"code":"0","message":"success","data":{}}
@@ -29,7 +29,17 @@ public interface IJson {
      * @return
      */
     Object fromJson(String json, Type type);
-    
+
+    /**
+     * 解析服务器返回的json
+     * data 为{"code":"0","message":"success","data":[]}中的array的情况
+     *
+     * @param json 待解析的json数据
+     * @param type 解析的数据模型，用于解决{@link TypeToken}不能使用泛型的缺点
+     * @return
+     */
+    Object fromJsonList(String json, Type type);
+
     /**
      * 解析服务器返回的json
      * data 为 array 的情况{"code":"0","message":"success","data":[]}

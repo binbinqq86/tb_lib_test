@@ -3,6 +3,7 @@ package com.tb.baselib.net.impl;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.tb.baselib.BuildConfig;
 import com.tb.baselib.constant.BaseConstant;
 import com.tb.baselib.constant.ExceptionCode;
 import com.tb.baselib.json.impl.GsonUtil;
@@ -25,6 +26,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by : tb on 2017/9/21 上午11:52.
@@ -39,7 +41,7 @@ public class OKHttpRequester implements IBaseModel {
      * V: 对应的OkHttpClient实例
      */
     private Map<Long, OkHttpClient> mInstanceMap = new Hashtable<>();
-    
+
     private OkHttpClient getInstance(long timeout) {
         if (mInstanceMap.containsKey(new Long(timeout))) {
             return mInstanceMap.get(new Long(timeout));
@@ -48,86 +50,107 @@ public class OKHttpRequester implements IBaseModel {
 //            SSLSocketFactory[] socketFactory = new SSLSocketFactory[1];
 //            X509TrustManager[] trustManager = new X509TrustManager[1];
 //            SSLCertificatesInit.init(socketFactory, trustManager, CertificatesManager.getPayCerInputStream());
-            OkHttpClient client = new OkHttpClient()
+            OkHttpClient.Builder builder = new OkHttpClient()
                     .newBuilder()
 //                    .sslSocketFactory(socketFactory[0], trustManager[0])
                     .connectTimeout(timeout, TimeUnit.MILLISECONDS)
                     .writeTimeout(timeout, TimeUnit.MILLISECONDS)
-                    .readTimeout(timeout, TimeUnit.MILLISECONDS)
-                    .build();
+                    .readTimeout(timeout, TimeUnit.MILLISECONDS);
+            if (BuildConfig.IS_DEBUG_MODE) {
+                //增加一个okhttp的日志打印拦截器
+                HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                builder.addInterceptor(loggingInterceptor);
+            }
+            OkHttpClient client = builder.build();
             mInstanceMap.put(new Long(timeout), client);
             return client;
         }
     }
-    
+
     private OKHttpRequester() {
     }
-    
+
     public static final OKHttpRequester getInstance() {
         return OKHttpSingletonHolder.instance;
     }
-    
+
     private static final class OKHttpSingletonHolder {
         private static final OKHttpRequester instance = new OKHttpRequester();
     }
-    
+
     @Override
     public void post(int requestCode, String url, final Class cls, Object param, OnRequestCallback callback) {
         this.post(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void post(final int requestCode, String url, final Class cls, Object param, final OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.POST, requestCode, url, cls, param, callback, timeout);
     }
-    
+
     @Override
     public void get(int requestCode, String url, Class cls, OnRequestCallback callback) {
         this.get(requestCode, url, cls, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void get(int requestCode, String url, Class cls, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.GET, requestCode, url, cls, null, callback, timeout);
     }
-    
+
     @Override
     public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.delete(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void delete(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.DELETE, requestCode, url, cls, param, callback, timeout);
     }
-    
+
     @Override
     public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback) {
         this.put(requestCode, url, cls, param, callback, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     @Override
     public void put(int requestCode, String url, Class cls, Object param, OnRequestCallback callback, long timeout) {
         doRequest(HttpConstant.PUT, requestCode, url, cls, param, callback, timeout);
     }
-    
+
     private void doRequest(final String type, final int requestCode, String url, final Class cls, Object param, final OnRequestCallback callback, long timeout) {
         try {
+            //默认为get
             Request.Builder builder = new Request.Builder()
                     .url(BaseConstant.BASE_API_URL + url)
                     .addHeader("content-type", HttpConstant.CONTENT_TYPE);
-            if (param != null) {
-                String jsonParam = GsonUtil.getInstance().toJson(param);
-                RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
-                LogUtils.json(jsonParam);
-                if (type.equalsIgnoreCase(HttpConstant.POST)) {
+
+            if (type.equalsIgnoreCase(HttpConstant.POST)) {
+                if (param != null) {
+                    String jsonParam = GsonUtil.getInstance().toJson(param);
+                    RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
+                    LogUtils.json(jsonParam);
                     builder.post(requestBody);
-                } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
+                }
+            } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
+                if (param != null) {
+                    String jsonParam = GsonUtil.getInstance().toJson(param);
+                    RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
+                    LogUtils.json(jsonParam);
                     builder.put(requestBody);
-                } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
+                }
+            } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
+                if (param != null) {
+                    String jsonParam = GsonUtil.getInstance().toJson(param);
+                    RequestBody requestBody = RequestBody.create(HttpConstant.JSON, jsonParam);
+                    LogUtils.json(jsonParam);
                     builder.delete(requestBody);
+                }else{
+                    builder.delete();
                 }
             }
+
             Request request = builder.build();
             LogUtils.d("method:" + type + "===" + url);
             getInstance(timeout).newCall(request).enqueue(new Callback() {
@@ -165,7 +188,7 @@ public class OKHttpRequester implements IBaseModel {
                         });
                     }
                 }
-                
+
                 @Override
                 public void onResponse(Call call, final Response response) throws IOException {
                     try {
@@ -180,13 +203,12 @@ public class OKHttpRequester implements IBaseModel {
                                             //此处只处理了data 为 object 的情况{"code":"0","message":"success","data":{}}的情况
                                             //data 为 array 的情况{"code":"0","message":"success","data":[]}的情况需另作处理（new TypeToken<ArrayList<JavaBean>>(){}.getType()）
                                             //简易处理方式如下：
-                                            Object respObj = null;
-                                            //String json="{\"code\":0,\"message\":\"success\",\"data\":[{\"name\":\"tb\",\"json\":\"mock\"}]}";
-                                            Type mType=cls;
+                                            Object respObj = new Object();
+//                                            String json="{\"code\":0,\"message\":\"success\",\"data\":[{\"name\":\"tb\",\"json\":\"mock\"}]}";
                                             if (json.replace(" ", "").contains("\"data\":{")) {
-                                                respObj = GsonUtil.getInstance().fromJson(json, mType);
+                                                respObj = GsonUtil.getInstance().fromJson(json, cls);
                                             } else if (json.replace(" ", "").contains("\"data\":[")) {
-                                                respObj = GsonUtil.getInstance().fromJsonArray(json, mType);
+                                                respObj = GsonUtil.getInstance().fromJsonArray(json, cls);
                                             }
                                             if (respObj instanceof BaseResponse) {
                                                 callback.onSuccess(response.code(), requestCode, ((BaseResponse) respObj).getData());
@@ -236,5 +258,10 @@ public class OKHttpRequester implements IBaseModel {
                 }
             });
         }
+    }
+
+    @Override
+    public void downLoadFile(String url) {
+
     }
 }

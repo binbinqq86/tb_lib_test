@@ -16,12 +16,12 @@ import java.lang.reflect.Type;
 public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T> {
     private IBaseView iBaseView;
     private IBaseModel iBaseModel;
-    
+
     public BasePresenterImpl(IBaseView iBaseView, IBaseModel iBaseModel) {
         this.iBaseView = iBaseView;
         this.iBaseModel = iBaseModel;
     }
-    
+
     /**
      * view来展示数据结果
      *
@@ -33,7 +33,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     public void onSuccess(int responseCode, int requestCode, T response) {
         iBaseView.onSuccess(responseCode, requestCode, response);
     }
-    
+
     /**
      * view来展示数据结果
      *
@@ -45,7 +45,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     public void onFailure(int responseCode, int requestCode, String errMsg) {
         iBaseView.onFailure(responseCode, requestCode, errMsg);
     }
-    
+
     /**
      * model来负责具体的数据请求
      *
@@ -67,14 +67,14 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
         } else if (type.equalsIgnoreCase(HttpConstant.POST)) {
             iBaseModel.post(requestCode, url, cls, param, this, timeout);
         } else if (type.equalsIgnoreCase(HttpConstant.DELETE)) {
-        
+            iBaseModel.delete(requestCode, url, cls, param, this, timeout);
         } else if (type.equalsIgnoreCase(HttpConstant.PUT)) {
-        
+            iBaseModel.put(requestCode, url, cls, param, this, timeout);
         } else {
-        
+            throw new IllegalArgumentException("===============不支持的请求类型==============");
         }
     }
-    
+
     /**
      * model来负责具体的数据请求
      *
@@ -88,7 +88,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
     public void loadData(int requestCode, String url, Class cls, Object param, String type) {
         loadData(requestCode, url, cls, param, type, HttpConstant.HTTP_DEFAULT_TIME_OUT);
     }
-    
+
     /**
      * model来负责具体的数据请求
      *
@@ -102,7 +102,7 @@ public class BasePresenterImpl<T> implements IBasePresenter, OnRequestCallback<T
         iBaseView.showLoadingView();
         iBaseModel.post(requestCode, url, cls, param, this);
     }
-    
+
     /**
      * 让Presenter不再持有Activity的引用，避免内存泄漏
      */

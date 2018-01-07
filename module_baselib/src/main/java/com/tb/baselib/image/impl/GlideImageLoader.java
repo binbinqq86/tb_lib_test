@@ -25,8 +25,8 @@ public class GlideImageLoader implements IImageDisplay {
     }
     
     @Override
-    public void displayByUrl(Context mContext, ImageView imageView, String url) {
-        Glide.with(mContext).load(url)
+    public void displayWith(Context mContext, ImageView imageView, Object param) {
+        Glide.with(mContext).load(param)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
     }
