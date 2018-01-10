@@ -169,7 +169,7 @@ public class NumberUtils {
         String mMoney = String.valueOf(obj);
         if (!TextUtils.isEmpty(mMoney)) {
             BigDecimal bigDecimal = new BigDecimal(mMoney);
-            if (bigDecimal.equals(BigDecimal.ZERO)) {
+            if (bigDecimal.compareTo(BigDecimal.ZERO)==0) {
                 return value;
             }
             try {
