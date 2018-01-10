@@ -10,6 +10,19 @@ import java.text.DecimalFormat;
  * Description :字符串转数字专用处理工具类
  */
 public class NumberUtils {
+    public static final String TYPE_NONE = "";
+    public static final String TYPE_¥ = "¥";
+    public static final String TYPE_FEN = "分";
+    public static final String TYPE_YUAN = "元";
+    public static final String TYPE_WAN = "万";
+    public static final String TYPE_SHIWAN = "十万";
+    public static final String TYPE_BAIWAN = "百万";
+    public static final String TYPE_QIANWAN = "千万";
+    public static final String TYPE_YI = "亿";
+    public static final String TYPE_SHIYI = "十亿";
+    public static final String TYPE_BAIYI = "百亿";
+    public static final String TYPE_QIANYI = "千亿";
+    public static final String TYPE_WANYI = "万亿";
     
     public static int objToInt(Object args) {
         int value = 0;
@@ -112,39 +125,63 @@ public class NumberUtils {
      *
      * @param obj      需要处理的数据，可以是字符串或者浮点，整型
      * @param divider  除数(0,10,100,1000,10000...)
-     * @param num      保留的小数位数(目前只支持0位,1位,2位,3位,4位小数)
-     * @param round    四舍五入还是舍弃类似的参考值 {@link BigDecimal#ROUND_DOWN,BigDecimal#ROUND_UP ...}
+     * @param decimal  保留的小数位数(目前只支持0位,1位,2位,3位,4位小数)
      * @param isFormat 数字是否三位一个逗号隔开(千分位)
+     * @param need¥    是否需要¥符号
+     * @param suffix   是否需要单位（参考：{@link #TYPE_YUAN,#TYPE_WAN,#TYPE_FEN}）
      * @return
      */
-    public static String formatNumber(Object obj, int divider, int num, int round, boolean isFormat) {
+    public static String formatNumber(Object obj, int divider, int decimal, boolean isFormat, boolean need¥, String suffix) {
+        return formatNumber(obj, divider, decimal, BigDecimal.ROUND_DOWN, isFormat, need¥, suffix);
+    }
+    
+    /**
+     * 大数据处理，按照指定的格式来展示数字
+     *
+     * @param obj      需要处理的数据，可以是字符串或者浮点，整型
+     * @param divider  除数(0,10,100,1000,10000...)
+     * @param decimal  保留的小数位数(目前只支持0位,1位,2位,3位,4位小数)
+     * @param round    四舍五入还是舍弃类似的参考值 {@link BigDecimal#ROUND_DOWN,BigDecimal#ROUND_UP ...}
+     * @param isFormat 数字是否三位一个逗号隔开(千分位)
+     * @param need¥    是否需要¥符号
+     * @param suffix   是否需要单位（参考：{@link #TYPE_YUAN,#TYPE_WAN,#TYPE_FEN}）
+     * @return
+     */
+    public static String formatNumber(Object obj, int divider, int decimal, int round, boolean isFormat, boolean need¥, String suffix) {
         String pattern = isFormat ? "###,##0" : "##0";
-        if (num == 1) {
+        if (decimal == 1) {
             pattern += ".0";
-        } else if (num == 2) {
+        } else if (decimal == 2) {
             pattern += ".00";
-        } else if (num == 3) {
+        } else if (decimal == 3) {
             pattern += ".000";
-        } else if (num == 4) {
+        } else if (decimal == 4) {
             pattern += ".0000";
         }
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
-        String value = decimalFormat.format(0);
+        String value = decimalFormat.format(0) + suffix;
+        if (need¥) {
+            value = TYPE_¥ + value;
+        }
         if (obj == null) {
             return value;
         }
         String mMoney = String.valueOf(obj);
         if (!TextUtils.isEmpty(mMoney)) {
-            if (stringToDouble(mMoney) == 0) {
+            BigDecimal bigDecimal = new BigDecimal(mMoney);
+            if (bigDecimal.equals(BigDecimal.ZERO)) {
                 return value;
             }
-            BigDecimal bigDecimal = new BigDecimal(mMoney);
             try {
                 if (divider > 0) {
-                    return decimalFormat.format(bigDecimal.divide(new BigDecimal(divider), num, round)).toString();
+                    value = decimalFormat.format(bigDecimal.divide(new BigDecimal(divider), decimal, round)).toString();
                 } else {//小于等于0返回原数据
-                    return decimalFormat.format(bigDecimal.setScale(num, round)).toString();
+                    value = decimalFormat.format(bigDecimal.setScale(decimal, round)).toString();
                 }
+                if (need¥) {
+                    value = TYPE_¥ + value;
+                }
+                return value + suffix;
             } catch (ArithmeticException e) {
                 return value;
             } catch (NullPointerException e) {
@@ -152,13 +189,5 @@ public class NumberUtils {
             }
         }
         return value;
-    }
-    
-    public static String formatNumberRoundDown(Object obj, int divider, int num, boolean isFormat) {
-        return formatNumber(obj, divider, num, BigDecimal.ROUND_DOWN, isFormat);
-    }
-    
-    public static String formatNumberRoundUp(Object obj, int divider, int num, boolean isFormat) {
-        return formatNumber(obj, divider, num, BigDecimal.ROUND_UP, isFormat);
     }
 }

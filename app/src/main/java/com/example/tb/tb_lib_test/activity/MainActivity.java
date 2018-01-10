@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,10 @@ import com.tb.baselib.image.impl.GlideImageLoader;
 import com.tb.baselib.manager.ActivityLauncher;
 import com.tb.baselib.manager.PermissionMgr;
 import com.tb.baselib.net.HttpConstant;
+import com.tb.baselib.util.NumberUtils;
 import com.tb.baselib.widget.ToastUtils;
+
+import java.math.BigDecimal;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
